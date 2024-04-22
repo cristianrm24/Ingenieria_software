@@ -3,111 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUD de Usuario y Proyecto</title>
+    <title>Admin</title>
 </head>
 <body>
-    <h1>CRUD de Usuario y Proyecto</h1>
-
-    <!-- Formulario para crear un nuevo usuario -->
-    <h2>Crear Nuevo Usuario</h2>
-    <form action="{{ url_for('crear_usuario') }}" method="POST">
-        <label for="nombre_usuario">Nombre de Usuario:</label>
-        <input type="text" name="nombre_usuario" id="nombre_usuario" required>
-        <label for="contraseña">Contraseña:</label>
-        <input type="password" name="contraseña" id="contraseña" required>
-        <label for="correo">Correo Electrónico:</label>
-        <input type="email" name="correo" id="correo" required>
-        <label for="rol">Rol:</label>
-        <input type="text" name="rol" id="rol" required>
-        <button type="submit">Crear Usuario</button>
-    </form>
-
-    <!-- Tabla para mostrar la lista de usuarios -->
-    <h2>Lista de Usuarios</h2>
+    <!-- Sección de usuarios -->
+    <h2>Usuarios</h2>
     <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre de Usuario</th>
-                <th>Correo Electrónico</th>
-                <th>Rol</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if usuarios %}
-                {% for usuario in usuarios %}
-                <tr>
-                    <td>{{ usuario.id }}</td>
-                    <td>{{ usuario.nombre_usuario }}</td>
-                    <td>{{ usuario.correo }}</td>
-                    <td>{{ usuario.rol }}</td>
-                    <td>
-                        <a href="{{ url_for('editar_usuario', usuario_id=usuario.id) }}">Editar</a>
-                        <a href="{{ url_for('eliminar_usuario', usuario_id=usuario.id) }}">Eliminar</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            {% else %}
-                <tr>
-                    <td colspan="5">No hay usuarios disponibles.</td>
-                </tr>
-            {% endif %}
-        </tbody>
+        <tr>
+            <th>Email</th>
+            <th>Ocupación</th>
+            <th>Institución</th>
+            <th>Edad</th>
+            <th>Nombre Completo</th>
+            <th>Acciones</th> <!-- Columna para botones de acciones -->
+        </tr>
+        {% for usuario in usuarios %}
+        <tr>
+            <td>{{ usuario.email }}</td>
+            <td>{{ usuario.ocupacion }}</td>
+            <td>{{ usuario.institucion }}</td>
+            <td>{{ usuario.edad }}</td>
+            <td>{{ usuario.nombre_completo }}</td>
+            <td>
+                <form action="{{ url_for('admin_app.editar_usuario', usuario_id=usuario.id) }}" method="post" style="display: inline;">
+                    <button type="submit" name="action" value="edit">Editar</button> <!-- Botón de editar -->
+                </form>
+                <form action="{{ url_for('admin_app.eliminar_usuario', usuario_id=usuario.id) }}" method="post" style="display: inline;">
+                    <button type="submit" name="action" value="delete">Eliminar</button> <!-- Botón de eliminar -->
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
     </table>
 
-    <!-- Formulario para crear un nuevo proyecto -->
-    <h2>Crear Nuevo Proyecto</h2>
-    <form action="{{ url_for('crear_proyecto') }}" method="POST">
-        <label for="titulo">Título:</label>
-        <input type="text" name="titulo" id="titulo" required>
-        <label for="autor">Autor:</label>
-        <input type="text" name="autor" id="autor" required>
-        <label for="descripcion">Descripción:</label>
-        <textarea name="descripcion" id="descripcion" rows="4" required></textarea>
-        <label for="palabras_clave">Palabras Clave:</label>
-        <input type="text" name="palabras_clave" id="palabras_clave" required>
-        <label for="fecha_publicacion">Fecha de Publicación:</label>
-        <input type="date" name="fecha_publicacion" id="fecha_publicacion" required>
-        <button type="submit">Crear Proyecto</button>
+    <!-- Sección de proyectos -->
+    <h2>Proyectos</h2>
+    <table>
+        <tr>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Autor</th>
+            <th>Fecha de Publicación</th>
+            <th>Palabras Clave</th>
+            <th>Acciones</th> <!-- Columna para botones de acciones -->
+        </tr>
+        {% for proyecto in proyectos %}
+        <tr>
+            <td>{{ proyecto.titulo }}</td>
+            <td>{{ proyecto.descripcion }}</td>
+            <td>{{ proyecto.autor }}</td>
+            <td>{{ proyecto.fecha_publicacion }}</td>
+            <td>{{ proyecto.palabras_clave }}</td>
+            <td>
+                <form action="{{ url_for('admin_app.editar_proyecto', proyecto_id=proyecto.id) }}" method="post" style="display: inline;">
+                    <button type="submit" name="action" value="edit">Editar</button> <!-- Botón de editar -->
+                </form>
+                <form action="{{ url_for('admin_app.eliminar_proyecto', proyecto_id=proyecto.id) }}" method="post" style="display: inline;">
+                    <button type="submit" name="action" value="delete">Eliminar</button> <!-- Botón de eliminar -->
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Formulario para agregar usuario -->
+    <h2>Agregar Usuario</h2>
+    <form action="{{ url_for('admin_app.usuarios') }}" method="post">
+        <label>Email:</label>
+        <input type="text" name="email" required><br><br>
+        <label>Contraseña:</label>
+        <input type="password" name="contraseña" required><br><br>
+        <label>Ocupación:</label>
+        <input type="text" name="ocupacion" required><br><br>
+        <label>Institución:</label>
+        <input type="text" name="institucion" required><br><br>
+        <label>Edad:</label>
+        <input type="number" name="edad" required><br><br>
+        <label>Nombre Completo:</label>
+        <input type="text" name="nombre_completo" required><br><br>
+        <button type="submit">Agregar Usuario</button>
     </form>
 
-    <!-- Tabla para mostrar la lista de proyectos -->
-    <h2>Lista de Proyectos</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Título</th>
-                <th>Autor</th>
-                <th>Descripción</th>
-                <th>Palabras Clave</th>
-                <th>Fecha de Publicación</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if proyectos %}
-                {% for proyecto in proyectos %}
-                <tr>
-                    <td>{{ proyecto.id }}</td>
-                    <td>{{ proyecto.titulo }}</td>
-                    <td>{{ proyecto.autor }}</td>
-                    <td>{{ proyecto.descripcion }}</td>
-                    <td>{{ proyecto.palabras_clave }}</td>
-                    <td>{{ proyecto.fecha_publicacion }}</td>
-                    <td>
-                        <a href="{{ url_for('editar_proyecto', proyecto_id=proyecto.id) }}">Editar</a>
-                        <a href="{{ url_for('eliminar_proyecto', proyecto_id=proyecto.id) }}">Eliminar</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            {% else %}
-                <tr>
-                    <td colspan="7">No hay proyectos disponibles.</td>
-                </tr>
-            {% endif %}
-        </tbody>
-    </table>
+    <!-- Formulario para agregar proyecto -->
+    <h2>Agregar Proyecto</h2>
+    <form action="{{ url_for('admin_app.proyectos') }}" method="post">
+        <label>Título:</label>
+        <input type="text" name="titulo" required><br><br>
+        <label>Descripción:</label>
+        <input type="text" name="descripcion" required><br><br>
+        <label>Autor:</label>
+        <input type="text" name="autor" required><br><br>
+        <label>Fecha de Publicación:</label>
+        <input type="text" name="fecha_publicacion" placeholder="dd/mm/aaaa" required><br><br>
+        <label>Palabras Clave:</label>
+        <input type="text" name="palabras_clave" required><br><br>
+        <button type="submit">Agregar Proyecto</button>
+    </form>
 </body>
 </html>
