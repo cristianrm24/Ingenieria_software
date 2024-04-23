@@ -1,35 +1,30 @@
-# Importar los módulos necesarios
 from flask import Flask, render_template, request, redirect, url_for, Blueprint, jsonify
 from firebase import firebase
 
-# Inicializar la aplicación Flask
 app = Flask(__name__, template_folder='logeo/templates')
-admin_app = Blueprint('admin_app', __name__, template_folder='admin/templates')  # Blueprint for admin section
-
-# Configurar la conexión con Firebase
+admin_app = Blueprint('admin_app', __name__, template_folder='admin/templates')
 firebase = firebase.FirebaseApplication("https://base-20e8f-default-rtdb.firebaseio.com/", None)
 
-# Función para obtener la lista de usuarios desde Firebase
+# Funciones de ayuda para obtener usuarios y proyectos
 def obtener_usuarios():
     usuarios = firebase.get('/Usuarios', None)
     if usuarios:
-        return [usuario for usuario_id, usuario in usuarios.items()]
+        return [{**usuario, 'id': usuario_id} for usuario_id, usuario in usuarios.items()]
     else:
         return []
 
-# Función para obtener la lista de proyectos desde Firebase
 def obtener_proyectos():
     proyectos = firebase.get('/Proyectos', None)
     if proyectos:
-        return [proyecto for proyecto_id, proyecto in proyectos.items()]
+        return [{**proyecto, 'id': proyecto_id} for proyecto_id, proyecto in proyectos.items()]
     else:
         return []
 
-# Ruta para el CRUD de usuarios en admin_index.html
+# Rutas para administrar usuarios
 @admin_app.route('/usuarios', methods=['GET', 'POST'])
 def usuarios():
     if request.method == 'POST':
-        # Obtener los datos del formulario
+        # Obtener datos del formulario
         email = request.form['email']
         contraseña = request.form['contraseña']
         ocupacion = request.form['ocupacion']
@@ -37,9 +32,7 @@ def usuarios():
         edad = request.form['edad']
         nombre_completo = request.form['nombre_completo']
         
-        # Verificar que los datos del formulario no estén vacíos
         if email and contraseña and ocupacion and institucion and edad and nombre_completo:
-            # Guardar los datos en la base de datos Firebase
             datos_usuario = {
                 'email': email,
                 'contraseña': contraseña,
@@ -49,34 +42,57 @@ def usuarios():
                 'nombre_completo': nombre_completo
             }
             firebase.post('/Usuarios', datos_usuario)
-            
-            # Redirigir al usuario a la misma página después de la inserción exitosa
             return redirect(url_for('admin_app.usuarios'))
     
-    # Obtener la lista de todos los usuarios existentes
     lista_usuarios = obtener_usuarios()
-    
-    # Obtener la lista de todos los proyectos existentes
     lista_proyectos = obtener_proyectos()
     
-    # Renderizar el formulario de inserción y las listas de usuarios y proyectos
     return render_template('admin_index.html', usuarios=lista_usuarios, proyectos=lista_proyectos)
 
+@admin_app.route('/editar_usuario/<string:usuario_id>', methods=['POST'])
+def editar_usuario(usuario_id):
+    usuario = firebase.get('/Usuarios', usuario_id)
+    if request.method == 'POST' and usuario:
+        # Obtener datos del formulario
+        email = request.json.get('email', usuario.get('email'))
+        ocupacion = request.json.get('ocupacion', usuario.get('ocupacion'))
+        institucion = request.json.get('institucion', usuario.get('institucion'))
+        edad = request.json.get('edad', usuario.get('edad'))
+        nombre_completo = request.json.get('nombre_completo', usuario.get('nombre_completo'))
+        
+        # Actualizar solo los campos que no son vacíos
+        datos_usuario = {}
+        if email:
+            datos_usuario['email'] = email
+        if ocupacion:
+            datos_usuario['ocupacion'] = ocupacion
+        if institucion:
+            datos_usuario['institucion'] = institucion
+        if edad:
+            datos_usuario['edad'] = edad
+        if nombre_completo:
+            datos_usuario['nombre_completo'] = nombre_completo
+        
+        # Verificar si hay al menos un campo no vacío para actualizar
+        if datos_usuario:
+            # Actualizar datos en la base de datos Firebase
+            firebase.put('/Usuarios', usuario_id, datos_usuario)
+            return jsonify({"message": "Usuario actualizado correctamente"})
+    
+    return jsonify({"message": "Error al actualizar usuario"})
 
-# Ruta para el CRUD de proyectos en admin_index.html
+# Rutas para administrar proyectos
 @admin_app.route('/proyectos', methods=['GET', 'POST'])
 def proyectos():
     if request.method == 'POST':
-        # Obtener los datos del formulario
+        # Obtener datos del formulario
         titulo = request.form['titulo']
         descripcion = request.form['descripcion']
         autor = request.form['autor']
         fecha_publicacion = request.form['fecha_publicacion']
         palabras_clave = request.form['palabras_clave']
         
-        # Verificar que los datos del formulario no estén vacíos
         if titulo and descripcion and autor and fecha_publicacion and palabras_clave:
-            # Guardar los datos en la base de datos Firebase
             datos_proyecto = {
                 'titulo': titulo,
                 'descripcion': descripcion,
@@ -85,85 +101,54 @@ def proyectos():
                 'palabras_clave': palabras_clave
             }
             firebase.post('/Proyectos', datos_proyecto)
-            
-            # Redirigir al usuario a la misma página después de la inserción exitosa
             return redirect(url_for('admin_app.proyectos'))
     
-    # Obtener la lista de todos los proyectos existentes
     lista_proyectos = obtener_proyectos()
-    
-    # Obtener la lista de todos los usuarios existentes
     lista_usuarios = obtener_usuarios()
     
-    # Renderizar el formulario de inserción y las listas de usuarios y proyectos
     return render_template('admin_index.html', proyectos=lista_proyectos, usuarios=lista_usuarios)
 
-
-# Rutas para editar y eliminar usuarios
-@admin_app.route('/usuarios/editar/<usuario_id>', methods=['POST'])
-def editar_usuario(usuario_id):
-    if request.method == 'POST':
-        # Obtener datos del formulario
-        email = request.form['email']
-        contraseña = request.form['contraseña']
-        ocupacion = request.form['ocupacion']
-        institucion = request.form['institucion']
-        edad = request.form['edad']
-        nombre_completo = request.form['nombre_completo']
-        
-        # Actualizar los datos en la base de datos Firebase
-        firebase.put('/Usuarios', usuario_id, {
-            'email': email,
-            'contraseña': contraseña,
-            'ocupacion': ocupacion,
-            'institucion': institucion,
-            'edad': edad,
-            'nombre_completo': nombre_completo
-        })
-        
-        # Redirigir al usuario después de la actualización exitosa
-        return redirect(url_for('admin_app.usuarios'))
-
-    # Lógica para obtener datos del usuario a editar y renderizar formulario de edición
-    usuario = firebase.get('/Usuarios', usuario_id)
-    return render_template('editar_usuario.html', usuario=usuario)
-
-
-@admin_app.route('/usuarios/eliminar/<usuario_id>', methods=['POST'])
-def eliminar_usuario(usuario_id):
-    # Eliminar usuario de la base de datos Firebase
-    firebase.delete('/Usuarios', usuario_id)
-    return jsonify({'message': 'El usuario ha sido eliminado correctamente'})
-
-
-# Rutas para editar y eliminar proyectos
-@admin_app.route('/proyectos/editar/<proyecto_id>', methods=['POST'])
+@admin_app.route('/editar_proyecto/<string:proyecto_id>', methods=['POST'])
 def editar_proyecto(proyecto_id):
-    if request.method == 'POST':
+    proyecto = firebase.get('/Proyectos', proyecto_id)
+    if request.method == 'POST' and proyecto:
         # Obtener datos del formulario
-        titulo = request.form['titulo']
-        descripcion = request.form['descripcion']
-        autor = request.form['autor']
-        fecha_publicacion = request.form['fecha_publicacion']
-        palabras_clave = request.form['palabras_clave']
+        titulo = request.json.get('titulo', proyecto.get('titulo'))
+        descripcion = request.json.get('descripcion', proyecto.get('descripcion'))
+        autor = request.json.get('autor', proyecto.get('autor'))
+        fecha_publicacion = request.json.get('fecha_publicacion', proyecto.get('fecha_publicacion'))
+        palabras_clave = request.json.get('palabras_clave', proyecto.get('palabras_clave'))
         
-        # Actualizar los datos en la base de datos Firebase
-        firebase.put('/Proyectos', proyecto_id, {
-            'titulo': titulo,
-            'descripcion': descripcion,
-            'autor': autor,
-            'fecha_publicacion': fecha_publicacion,
-            'palabras_clave': palabras_clave
-        })
+        # Actualizar solo los campos que no son vacíos
+        datos_proyecto = {}
+        if titulo:
+            datos_proyecto['titulo'] = titulo
+        if descripcion:
+            datos_proyecto['descripcion'] = descripcion
+        if autor:
+            datos_proyecto['autor'] = autor
+        if fecha_publicacion:
+            datos_proyecto['fecha_publicacion'] = fecha_publicacion
+        if palabras_clave:
+            datos_proyecto['palabras_clave'] = palabras_clave
         
-        # Redirigir al usuario después de la actualización exitosa
-        return redirect(url_for('admin_app.proyectos'))
+        # Verificar si hay al menos un campo no vacío para actualizar
+        if datos_proyecto:
+            # Actualizar datos en la base de datos Firebase
+            firebase.put('/Proyectos', proyecto_id, datos_proyecto)
+            return jsonify({"message": "Proyecto actualizado correctamente"})
+    
+    return jsonify({"message": "Error al actualizar proyecto"})
 
-@admin_app.route('/proyectos/eliminar/<proyecto_id>', methods=['POST'])
+@admin_app.route('/eliminar_usuario/<string:usuario_id>', methods=['DELETE'])
+def eliminar_usuario(usuario_id):
+    firebase.delete('/Usuarios', usuario_id)
+    return jsonify({"message": "Usuario eliminado correctamente"})
+
+@admin_app.route('/eliminar_proyecto/<string:proyecto_id>', methods=['DELETE'])
 def eliminar_proyecto(proyecto_id):
-    # Eliminar proyecto de la base de datos Firebase
     firebase.delete('/Proyectos', proyecto_id)
-    return redirect(url_for('admin_app.proyectos'))
+    return jsonify({"message": "Proyecto eliminado correctamente"})
 
 
 # Registrar el Blueprint en la aplicación Flask
@@ -177,7 +162,6 @@ def registro():
         email = request.form['email']
         contraseña = request.form['contraseña']
         
-        # Verificar que los datos cumplen con los requisitos (puedes agregar validaciones aquí)
         if email and contraseña:
             # Guardar los datos en la base de datos Firebase
             datos_usuario = {
@@ -186,10 +170,8 @@ def registro():
             }
             firebase.post('/Usuarios', datos_usuario)
             
-            # Redirigir al usuario al login después del registro exitoso
             return redirect(url_for('login'))
     
-    # Renderizar el formulario de registro si la solicitud es GET o si hay errores en la solicitud POST
     return render_template('registro.html')
 
 # Ruta para el login
@@ -199,15 +181,11 @@ def login():
         email = request.form['email']
         contraseña = request.form['contraseña']
         
-        # Verificar si las credenciales coinciden con el usuario administrador
         if email == 'admin@gmail.com' and contraseña == '123':
-            # Si coincide, redirigir a la página de administrador
-            return redirect(url_for('admin_app.usuarios'))  # Redirect to admin users through blueprint
+            return redirect(url_for('admin_app.usuarios'))
         
-        # Si no coincide, verificar en la base de datos Firebase
         usuario_en_db = firebase.get('/Usuarios', email)
         if usuario_en_db and usuario_en_db.get('contraseña') == contraseña:
-            # Redirigir a la página de usuario normal (aquí deberías definir la ruta correspondiente)
             return redirect(url_for('pagina_normal'))
 
     return render_template('login.html')
