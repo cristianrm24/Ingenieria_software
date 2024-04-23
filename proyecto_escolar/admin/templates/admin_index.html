@@ -1,194 +1,223 @@
-from flask import Flask, render_template, request, redirect, url_for, Blueprint, jsonify
-from firebase import firebase
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+</head>
+<body>
+    <!-- Sección de usuarios -->
+    <h2>Usuarios</h2>
+    <table>
+        <tr>
+            <th>Email</th>
+            <th>Ocupación</th>
+            <th>Institución</th>
+            <th>Edad</th>
+            <th>Nombre Completo</th>
+            <th>Acciones</th> <!-- Columna para botones de acciones -->
+        </tr>
+        {% for usuario in usuarios %}
+        <tr>
+            <td>{{ usuario.email }}</td>
+            <td>{{ usuario.ocupacion }}</td>
+            <td>{{ usuario.institucion }}</td>
+            <td>{{ usuario.edad }}</td>
+            <td>{{ usuario.nombre_completo }}</td>
+            <td>
+                <button onclick="editarUsuario('{{ usuario.id }}')">Editar</button>
+                <button onclick="eliminarUsuario('{{ usuario.id }}')">Eliminar</button>
+            </td>
+        </tr>
+        <tr id="editar_usuario_{{ usuario.id }}" style="display: none;">
+            <td><input type="text" id="email_{{ usuario.id }}" value="{{ usuario.email }}"></td>
+            <td><input type="text" id="ocupacion_{{ usuario.id }}" value="{{ usuario.ocupacion }}"></td>
+            <td><input type="text" id="institucion_{{ usuario.id }}" value="{{ usuario.institucion }}"></td>
+            <td><input type="number" id="edad_{{ usuario.id }}" value="{{ usuario.edad }}"></td>
+            <td><input type="text" id="nombre_completo_{{ usuario.id }}" value="{{ usuario.nombre_completo }}"></td>
+            <td>
+                <button onclick="guardarCambiosUsuario('{{ usuario.id }}')">Guardar cambios</button>
+                <button onclick="cancelarEdicionUsuario('{{ usuario.id }}')">Cancelar</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
 
-app = Flask(__name__, template_folder='logeo/templates')
-admin_app = Blueprint('admin_app', __name__, template_folder='admin/templates')
-firebase = firebase.FirebaseApplication("https://base-20e8f-default-rtdb.firebaseio.com/", None)
+    <!-- Sección de proyectos -->
+    <h2>Proyectos</h2>
+    <table>
+        <tr>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Autor</th>
+            <th>Fecha de Publicación</th>
+            <th>Palabras Clave</th>
+            <th>Acciones</th> <!-- Columna para botones de acciones -->
+        </tr>
+        {% for proyecto in proyectos %}
+        <tr>
+            <td>{{ proyecto.titulo }}</td>
+            <td>{{ proyecto.descripcion }}</td>
+            <td>{{ proyecto.autor }}</td>
+            <td>{{ proyecto.fecha_publicacion }}</td>
+            <td>{{ proyecto.palabras_clave }}</td>
+            <td>
+                <button onclick="editarProyecto('{{ proyecto.id }}')">Editar</button>
+                <button onclick="eliminarProyecto('{{ proyecto.id }}')">Eliminar</button>
+            </td>
+        </tr>
+        <tr id="editar_proyecto_{{ proyecto.id }}" style="display: none;">
+            <td><input type="text" id="titulo_{{ proyecto.id }}" value="{{ proyecto.titulo }}"></td>
+            <td><input type="text" id="descripcion_{{ proyecto.id }}" value="{{ proyecto.descripcion }}"></td>
+            <td><input type="text" id="autor_{{ proyecto.id }}" value="{{ proyecto.autor }}"></td>
+            <td><input type="text" id="fecha_publicacion_{{ proyecto.id }}" value="{{ proyecto.fecha_publicacion }}"></td>
+            <td><input type="text" id="palabras_clave_{{ proyecto.id }}" value="{{ proyecto.palabras_clave }}"></td>
+            <td>
+                <button onclick="guardarCambiosProyecto('{{ proyecto.id }}')">Guardar cambios</button>
+                <button onclick="cancelarEdicionProyecto('{{ proyecto.id }}')">Cancelar</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
 
-# Funciones de ayuda para obtener usuarios y proyectos
-def obtener_usuarios():
-    usuarios = firebase.get('/Usuarios', None)
-    if usuarios:
-        return [{**usuario, 'id': usuario_id} for usuario_id, usuario in usuarios.items()]
-    else:
-        return []
+    <!-- Formulario para agregar usuario -->
+    <h2>Agregar Usuario</h2>
+    <form action="{{ url_for('admin_app.usuarios') }}" method="post">
+        <label>Email:</label>
+        <input type="text" name="email" required><br><br>
+        <label>Contraseña:</label>
+        <input type="password" name="contraseña" required><br><br>
+        <label>Ocupación:</label>
+        <input type="text" name="ocupacion" required><br><br>
+        <label>Institución:</label>
+        <input type="text" name="institucion" required><br><br>
+        <label>Edad:</label>
+        <input type="number" name="edad" required><br><br>
+        <label>Nombre Completo:</label>
+        <input type="text" name="nombre_completo" required><br><br>
+        <button type="submit">Agregar Usuario</button>
+    </form>
 
-def obtener_proyectos():
-    proyectos = firebase.get('/Proyectos', None)
-    if proyectos:
-        return [{**proyecto, 'id': proyecto_id} for proyecto_id, proyecto in proyectos.items()]
-    else:
-        return []
+    <!-- Formulario para agregar proyecto -->
+    <h2>Agregar Proyecto</h2>
+    <form action="{{ url_for('admin_app.proyectos') }}" method="post">
+        <label>Título:</label>
+        <input type="text" name="titulo" required><br><br>
+        <label>Descripción:</label>
+        <input type="text" name="descripcion" required><br><br>
+        <label>Autor:</label>
+        <input type="text" name="autor" required><br><br>
+        <label>Fecha de Publicación:</label>
+        <input type="text" name="fecha_publicacion" placeholder="dd/mm/aaaa" required><br><br>
+        <label>Palabras Clave:</label>
+        <input type="text" name="palabras_clave" required><br><br>
+        <button type="submit">Agregar Proyecto</button>
+    </form>
 
-# Rutas para administrar usuarios
-@admin_app.route('/usuarios', methods=['GET', 'POST'])
-def usuarios():
-    if request.method == 'POST':
-        # Obtener datos del formulario
-        email = request.form['email']
-        contraseña = request.form['contraseña']
-        ocupacion = request.form['ocupacion']
-        institucion = request.form['institucion']
-        edad = request.form['edad']
-        nombre_completo = request.form['nombre_completo']
-        
-        if email and contraseña and ocupacion and institucion and edad and nombre_completo:
-            datos_usuario = {
-                'email': email,
-                'contraseña': contraseña,
-                'ocupacion': ocupacion,
-                'institucion': institucion,
-                'edad': edad,
-                'nombre_completo': nombre_completo
+    <script>
+        function editarUsuario(usuarioId) {
+            document.getElementById('editar_usuario_' + usuarioId).style.display = 'table-row';
+        }
+
+        function cancelarEdicionUsuario(usuarioId) {
+            document.getElementById('editar_usuario_' + usuarioId).style.display = 'none';
+        }
+
+        function guardarCambiosUsuario(usuarioId) {
+            var email = document.getElementById('email_' + usuarioId).value;
+            var ocupacion = document.getElementById('ocupacion_' + usuarioId).value;
+            var institucion = document.getElementById('institucion_' + usuarioId).value;
+            var edad = document.getElementById('edad_' + usuarioId).value;
+            var nombre_completo = document.getElementById('nombre_completo_' + usuarioId).value;
+
+            fetch("/editar_usuario/" + usuarioId, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    ocupacion: ocupacion,
+                    institucion: institucion,
+                    edad: edad,
+                    nombre_completo: nombre_completo
+                })
+            }).then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    console.error("Error al guardar cambios de usuario");
+                }
+            });
+
+            return false; // Para evitar el envío del formulario
+        }
+
+        function editarProyecto(proyectoId) {
+            document.getElementById('editar_proyecto_' + proyectoId).style.display = 'table-row';
+        }
+
+        function cancelarEdicionProyecto(proyectoId) {
+            document.getElementById('editar_proyecto_' + proyectoId).style.display = 'none';
+        }
+
+        function guardarCambiosProyecto(proyectoId) {
+            var titulo = document.getElementById('titulo_' + proyectoId).value;
+            var descripcion = document.getElementById('descripcion_' + proyectoId).value;
+            var autor = document.getElementById('autor_' + proyectoId).value;
+            var fecha_publicacion = document.getElementById('fecha_publicacion_' + proyectoId).value;
+            var palabras_clave = document.getElementById('palabras_clave_' + proyectoId).value;
+
+            fetch("/editar_proyecto/" + proyectoId, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    titulo: titulo,
+                    descripcion: descripcion,
+                    autor: autor,
+                    fecha_publicacion: fecha_publicacion,
+                    palabras_clave: palabras_clave
+                })
+            }).then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    console.error("Error al guardar cambios de proyecto");
+                }
+            });
+
+            return false; // Para evitar el envío del formulario
+        }
+
+        function eliminarUsuario(usuarioId) {
+            if (confirm("¿Estás seguro de que quieres eliminar este usuario?")) {
+                fetch("/eliminar_usuario/" + usuarioId, {
+                    method: "DELETE"
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        console.error("Error al eliminar usuario");
+                    }
+                });
             }
-            firebase.post('/Usuarios', datos_usuario)
-            return redirect(url_for('admin_app.usuarios'))
-    
-    lista_usuarios = obtener_usuarios()
-    lista_proyectos = obtener_proyectos()
-    
-    return render_template('admin_index.html', usuarios=lista_usuarios, proyectos=lista_proyectos)
+        }
 
-@admin_app.route('/editar_usuario/<string:usuario_id>', methods=['POST'])
-def editar_usuario(usuario_id):
-    usuario = firebase.get('/Usuarios', usuario_id)
-    if request.method == 'POST' and usuario:
-        # Obtener datos del formulario
-        email = request.json.get('email', usuario.get('email'))
-        ocupacion = request.json.get('ocupacion', usuario.get('ocupacion'))
-        institucion = request.json.get('institucion', usuario.get('institucion'))
-        edad = request.json.get('edad', usuario.get('edad'))
-        nombre_completo = request.json.get('nombre_completo', usuario.get('nombre_completo'))
-        
-        # Actualizar solo los campos que no son vacíos
-        datos_usuario = {}
-        if email:
-            datos_usuario['email'] = email
-        if ocupacion:
-            datos_usuario['ocupacion'] = ocupacion
-        if institucion:
-            datos_usuario['institucion'] = institucion
-        if edad:
-            datos_usuario['edad'] = edad
-        if nombre_completo:
-            datos_usuario['nombre_completo'] = nombre_completo
-        
-        # Verificar si hay al menos un campo no vacío para actualizar
-        if datos_usuario:
-            # Actualizar datos en la base de datos Firebase
-            firebase.put('/Usuarios', usuario_id, datos_usuario)
-            return jsonify({"message": "Usuario actualizado correctamente"})
-    
-    return jsonify({"message": "Error al actualizar usuario"})
-
-# Rutas para administrar proyectos
-@admin_app.route('/proyectos', methods=['GET', 'POST'])
-def proyectos():
-    if request.method == 'POST':
-        # Obtener datos del formulario
-        titulo = request.form['titulo']
-        descripcion = request.form['descripcion']
-        autor = request.form['autor']
-        fecha_publicacion = request.form['fecha_publicacion']
-        palabras_clave = request.form['palabras_clave']
-        
-        if titulo and descripcion and autor and fecha_publicacion and palabras_clave:
-            datos_proyecto = {
-                'titulo': titulo,
-                'descripcion': descripcion,
-                'autor': autor,
-                'fecha_publicacion': fecha_publicacion,
-                'palabras_clave': palabras_clave
+        function eliminarProyecto(proyectoId) {
+            if (confirm("¿Estás seguro de que quieres eliminar este proyecto?")) {
+                fetch("/eliminar_proyecto/" + proyectoId, {
+                    method: "DELETE"
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        console.error("Error al eliminar proyecto");
+                    }
+                });
             }
-            firebase.post('/Proyectos', datos_proyecto)
-            return redirect(url_for('admin_app.proyectos'))
-    
-    lista_proyectos = obtener_proyectos()
-    lista_usuarios = obtener_usuarios()
-    
-    return render_template('admin_index.html', proyectos=lista_proyectos, usuarios=lista_usuarios)
-
-@admin_app.route('/editar_proyecto/<string:proyecto_id>', methods=['POST'])
-def editar_proyecto(proyecto_id):
-    proyecto = firebase.get('/Proyectos', proyecto_id)
-    if request.method == 'POST' and proyecto:
-        # Obtener datos del formulario
-        titulo = request.json.get('titulo', proyecto.get('titulo'))
-        descripcion = request.json.get('descripcion', proyecto.get('descripcion'))
-        autor = request.json.get('autor', proyecto.get('autor'))
-        fecha_publicacion = request.json.get('fecha_publicacion', proyecto.get('fecha_publicacion'))
-        palabras_clave = request.json.get('palabras_clave', proyecto.get('palabras_clave'))
-        
-        # Actualizar solo los campos que no son vacíos
-        datos_proyecto = {}
-        if titulo:
-            datos_proyecto['titulo'] = titulo
-        if descripcion:
-            datos_proyecto['descripcion'] = descripcion
-        if autor:
-            datos_proyecto['autor'] = autor
-        if fecha_publicacion:
-            datos_proyecto['fecha_publicacion'] = fecha_publicacion
-        if palabras_clave:
-            datos_proyecto['palabras_clave'] = palabras_clave
-        
-        # Verificar si hay al menos un campo no vacío para actualizar
-        if datos_proyecto:
-            # Actualizar datos en la base de datos Firebase
-            firebase.put('/Proyectos', proyecto_id, datos_proyecto)
-            return jsonify({"message": "Proyecto actualizado correctamente"})
-    
-    return jsonify({"message": "Error al actualizar proyecto"})
-
-@admin_app.route('/eliminar_usuario/<string:usuario_id>', methods=['DELETE'])
-def eliminar_usuario(usuario_id):
-    firebase.delete('/Usuarios', usuario_id)
-    return jsonify({"message": "Usuario eliminado correctamente"})
-
-@admin_app.route('/eliminar_proyecto/<string:proyecto_id>', methods=['DELETE'])
-def eliminar_proyecto(proyecto_id):
-    firebase.delete('/Proyectos', proyecto_id)
-    return jsonify({"message": "Proyecto eliminado correctamente"})
-
-
-# Registrar el Blueprint en la aplicación Flask
-app.register_blueprint(admin_app)
-
-# Ruta para el registro de usuarios
-@app.route('/registro', methods=['GET', 'POST'])
-def registro():
-    if request.method == 'POST':
-        # Obtener los datos del formulario
-        email = request.form['email']
-        contraseña = request.form['contraseña']
-        
-        if email and contraseña:
-            # Guardar los datos en la base de datos Firebase
-            datos_usuario = {
-                'email': email,
-                'contraseña': contraseña
-            }
-            firebase.post('/Usuarios', datos_usuario)
-            
-            return redirect(url_for('login'))
-    
-    return render_template('registro.html')
-
-# Ruta para el login
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        email = request.form['email']
-        contraseña = request.form['contraseña']
-        
-        if email == 'admin@gmail.com' and contraseña == '123':
-            return redirect(url_for('admin_app.usuarios'))
-        
-        usuario_en_db = firebase.get('/Usuarios', email)
-        if usuario_en_db and usuario_en_db.get('contraseña') == contraseña:
-            return redirect(url_for('pagina_normal'))
-
-    return render_template('login.html')
-
-if __name__ == '__main__':
-    app.run(debug=True)
+        }
+    </script>
+</body>
+</html>
