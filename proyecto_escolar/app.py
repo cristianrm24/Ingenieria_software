@@ -5,6 +5,25 @@ app = Flask(__name__, template_folder='logeo/templates')
 admin_app = Blueprint('admin_app', __name__, template_folder='admin/templates')
 firebase = firebase.FirebaseApplication("https://base-20e8f-default-rtdb.firebaseio.com/", None)
 
+
+@admin_app.route('/search_index', methods=['GET'])
+def buscar():
+    query = request.args.get('query')  # Obtener el parámetro de búsqueda de la URL
+    
+    if query:
+        # Realizar la búsqueda en usuarios y proyectos
+        usuarios_encontrados = [usuario for usuario in obtener_usuarios() if query.lower() in usuario['nombre_completo'].lower()]
+        proyectos_encontrados = [proyecto for proyecto in obtener_proyectos() if query.lower() in proyecto['titulo'].lower()]
+        
+        if usuarios_encontrados or proyectos_encontrados:
+            return render_template('busqueda_resultados.html', usuarios=usuarios_encontrados, proyectos=proyectos_encontrados, query=query)
+        else:
+            return render_template('busqueda_sin_resultados.html', query=query)
+    else:
+        # Si no se proporciona una consulta, simplemente mostrar la página de búsqueda
+        return render_template('search_index.html')
+
+
 # Funciones de ayuda para obtener usuarios y proyectos
 def obtener_usuarios():
     usuarios = firebase.get('/Usuarios', None)

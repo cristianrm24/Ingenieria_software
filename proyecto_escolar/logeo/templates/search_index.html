@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Proyectos</title>
+</head>
+<body>
+    <h1>Buscar Proyectos</h1>
+    <form action="/buscar" method="GET">
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="titulo">
+        <button type="submit">Buscar</button>
+    </form>
+    <div id="proyectos"></div>
+    <script>
+        document.querySelector('form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const titulo = document.getElementById('titulo').value;
+            const response = await fetch(`/buscar?titulo=${titulo}`);
+            const data = await response.json();
+            const proyectosDiv = document.getElementById('proyectos');
+            proyectosDiv.innerHTML = ''; // Limpiar resultados anteriores
+            if (data.length === 0) {
+                proyectosDiv.innerHTML = '<p>No se encontraron proyectos.</p>';
+            } else {
+                const proyectoList = document.createElement('ul');
+                data.forEach(proyecto => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `Título: ${proyecto.titulo}, Descripción: ${proyecto.descripcion}, Autor: ${proyecto.autor}`;
+                    proyectoList.appendChild(listItem);
+                });
+                proyectosDiv.appendChild(proyectoList);
+            }
+        });
+    </script>
+</body>
+</html>

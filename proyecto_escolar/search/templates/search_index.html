@@ -3,32 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search</title>
+    <title>Buscar Proyectos</title>
 </head>
 <body>
-    <h1>Search</h1>
-    <form action="/search" method="GET">
-        <input type="text" name="query" placeholder="Search...">
-        <button type="submit">Search</button>
+    <h1>Buscar Proyectos</h1>
+    <form action="/buscar_proyectos" method="GET">
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="titulo">
+        <button type="submit">Buscar</button>
     </form>
-
-    {% if results %}
-        <h2>Search Results</h2>
-        <ul>
-            {% for result in results %}
-                <li>{{ result }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    
-    <!-- Enlaces a otras páginas -->
-    <h2>Otras páginas:</h2>
-    <ul>
-        <li><a href="/registro">Registro</a></li>
-        <li><a href="/login">Inicio de Sesión</a></li>
-        <li><a href="/perfil">Perfil</a></li>
-        <li><a href="/recuperar-contraseña">Recuperar Contraseña</a></li>
-        <!-- Ten en cuenta que el enlace para nueva contraseña depende de tener un token válido -->
-    </ul>
+    <div id="proyectos"></div>
+    <script>
+        document.querySelector('form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const titulo = document.getElementById('titulo').value;
+            const response = await fetch(`/buscar_proyectos?titulo=${titulo}`);
+            const data = await response.json();
+            const proyectosDiv = document.getElementById('proyectos');
+            proyectosDiv.innerHTML = ''; // Limpiar resultados anteriores
+            if (data.length === 0) {
+                proyectosDiv.innerHTML = '<p>No se encontraron proyectos.</p>';
+            } else {
+                const proyectoList = document.createElement('ul');
+                data.forEach(proyecto => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `Título: ${proyecto.titulo}, Descripción: ${proyecto.descripcion}, Autor: ${proyecto.autor}`;
+                    proyectoList.appendChild(listItem);
+                });
+                proyectosDiv.appendChild(proyectoList);
+            }
+        });
+    </script>
 </body>
 </html>
