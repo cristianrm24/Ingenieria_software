@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, Blueprint, jsonify
 from firebase import firebase
 
-app = Flask(__name__, template_folder='logeo/templates')
+#app = Flask(__name__, template_folder='logeo/templates')
+app = Flask(__name__, template_folder='logeo/templates', static_folder='static')
+
+
 admin_app = Blueprint('admin_app', __name__, template_folder='admin/templates')
 firebase = firebase.FirebaseApplication("https://base-20e8f-default-rtdb.firebaseio.com/", None)
 
