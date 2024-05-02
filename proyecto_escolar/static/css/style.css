@@ -6,7 +6,11 @@
     --negro: #000;
     --grisOcuro: #333333;
     --grisClaro: #e0e0e077;
-
+    --verde: #aacc00;
+    --verdeOscuro: #80b918;
+    --rojo: #e5383b;
+    --rojoOscuro: #ba181b;
+    --gris: ##dddddd;
 
 }
 
@@ -28,6 +32,7 @@ header{
     justify-content: space-between;
     padding: 1rem;
     background-color: var(--azul);
+    margin-bottom: 5rem;
 }
 .contenedor{
     width: 80%; /* Ancho del contenedor */
@@ -36,6 +41,10 @@ header{
   
     box-sizing: border-box; /* El padding y el borde se incluyen en el ancho total */
     margin: 5rem auto;
+}
+.linea{
+    border-top: 1px solid var(--azul);
+    margin-bottom: 5rem;
 }
 .btn{
     padding: 0.5rem;
@@ -50,6 +59,18 @@ header{
 .btn:hover{
     cursor:pointer;
     background-color: var(--azulFuerte);
+}
+.btn-verde{
+    background-color: var(--verde);
+}
+.btn-verde:hover{
+    background-color: var(--verdeOscuro);
+}
+.btn-rojo{
+    background-color:var(--rojo);
+}
+.btn-rojo:hover{
+    background-color: var(--rojoOscuro);
 }
 .logo img{
     max-width: 5rem;
@@ -123,7 +144,7 @@ header{
 
 /**Footer**/
 footer{
-    position: absolute;
+    
     bottom: 0;
     width: 100%;
     background-color: var(--azul);
@@ -158,24 +179,45 @@ footer a:hover{
 .titulo_login{
     margin-top: 2.5rem;
 }
-.formulario_login{
+.formulario{
     background-color:var(--grisClaro);
     width: 30%;
     margin: 2rem auto;
     padding: 2rem;
-}
-.contenido_login label,input{
-    display: block;
-    margin: .5rem auto ;
-
-}
-.contenido_login label{
     text-align: center;
 }
-.contenido_login input{
+.contenido_formulario label,input{
+    display: block;
+    margin: .5rem auto ;
+    padding: 0.5rem;
+  
+
+}
+.contenido_formulario label{
+    text-align: center;
+}
+.contenido_formulario input{
     border-radius: .3rem;
     padding: .5rem;
     width: 80%;
     
 }
 
+/**PAGINA DE ADMINISTRADOR**/
+.contenido-usuarios{
+    padding: 0;
+}
+.tabla{
+    
+    margin: 0 auto;
+    border-collapse: collapse;
+    width: 100%;
+}
+.tabla th,tr{
+    border: 1px solid var(--gris);
+    text-align: left;
+    padding: 8px;
+}
+.tabla th{
+    background-color: #f2f2f2;
+}
