@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Búsqueda Avanzada</title>
+</head>
+<body>
+    <h1>Búsqueda Avanzada</h1>
+    <form action="/buscar_avanzado" method="GET">
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="titulo"><br><br>
+
+        <label for="descripcion">Descripción:</label>
+        <input type="text" id="descripcion" name="descripcion"><br><br>
+
+        <label for="autor">Autor:</label>
+        <input type="text" id="autor" name="autor"><br><br>
+
+        <label for="fecha_publicacion">Fecha de Publicación:</label>
+        <input type="date" id="fecha_publicacion" name="fecha_publicacion"><br><br>
+
+        <label for="palabras_clave">Palabras Clave:</label>
+        <input type="text" id="palabras_clave" name="palabras_clave"><br><br>
+
+        <label for="area">Área:</label>
+        <select id="area" name="area">
+            <option value="Ciencias">Ciencias</option>
+            <option value="Tecnología">Tecnología</option>
+            <option value="Ingeniería">Ingeniería</option>
+            <option value="Matemáticas">Matemáticas</option>
+            <!-- Agrega más opciones según tus necesidades -->
+        </select><br><br>
+
+        <button type="submit">Buscar</button>
+    </form>
+    <div id="resultados"></div>
+    <script>
+        document.querySelector('form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(document.querySelector('form'));
+            const urlSearchParams = new URLSearchParams(formData);
+            const response = await fetch(`/buscar_avanzado?${urlSearchParams.toString()}`);
+            const data = await response.json();
+            const resultadosDiv = document.getElementById('resultados');
+            resultadosDiv.innerHTML = ''; // Limpiar resultados anteriores
+            if (data.length === 0) {
+                resultadosDiv.innerHTML = '<p>No se encontraron resultados.</p>';
+            } else {
+                const listaResultados = document.createElement('ul');
+                data.forEach(resultado => {
+                    const itemResultado = document.createElement('li');
+                    // Agrega aquí cómo deseas mostrar cada resultado
+                    itemResultado.textContent = `Título: ${resultado.titulo}, Descripción: ${resultado.descripcion}`;
+                    listaResultados.appendChild(itemResultado);
+                });
+                resultadosDiv.appendChild(listaResultados);
+            }
+        });
+    </script>
+</body>
+</html>

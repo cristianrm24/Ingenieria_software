@@ -23,6 +23,36 @@ def buscar():
         # Si no se proporciona una consulta, simplemente mostrar la página de búsqueda
         return render_template('search_index.html')
 
+# Nueva ruta para la búsqueda avanzada
+@admin_app.route('/buscar_avanzado', methods=['GET'])
+def buscar_avanzado():
+    # Obtener parámetros de búsqueda del formulario
+    titulo = request.args.get('titulo')
+    descripcion = request.args.get('descripcion')
+    autor = request.args.get('autor')
+    fecha_publicacion = request.args.get('fecha_publicacion')
+    palabras_clave = request.args.get('palabras_clave')
+    area = request.args.get('area')
+
+    # Realizar la búsqueda avanzada en la base de datos Firebase
+    proyectos = firebase.get('/Proyectos', None)
+    resultados = []
+
+    if proyectos:
+        for proyecto_id, proyecto in proyectos.items():
+            # Verificar si el proyecto coincide con los criterios de búsqueda
+            coincide_titulo = titulo.lower() in proyecto.get('titulo', '').lower() if titulo else True
+            coincide_descripcion = descripcion.lower() in proyecto.get('descripcion', '').lower() if descripcion else True
+            coincide_autor = autor.lower() in proyecto.get('autor', '').lower() if autor else True
+            coincide_palabras_clave = palabras_clave.lower() in proyecto.get('palabras_clave', '').lower() if palabras_clave else True
+            coincide_area = area.lower() == proyecto.get('area', '').lower() if area else True
+            coincide_fecha_publicacion = fecha_publicacion == proyecto.get('fecha_publicacion') if fecha_publicacion else True
+
+            if coincide_titulo and coincide_descripcion and coincide_autor and coincide_palabras_clave and coincide_area and coincide_fecha_publicacion:
+                proyecto['id'] = proyecto_id
+                resultados.append(proyecto)
+
+    return jsonify(resultados)
 
 # Funciones de ayuda para obtener usuarios y proyectos
 def obtener_usuarios():
