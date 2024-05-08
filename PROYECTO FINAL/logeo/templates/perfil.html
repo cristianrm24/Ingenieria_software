@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Estilos para el encabezado */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+        }
+        .header-icons {
+            display: flex;
+            gap: 10px;
+        }
+        .logout-btn, .search-btn {
+            cursor: pointer;
+            color: white;
+            font-size: 20px;
+        }
+
+        /* Estilos para el formulario */
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Nombre de la Aplicación</h1>
+        <div class="header-icons">
+            <i class="fas fa-search search-btn" onclick="location.href='/buscar'"></i>
+            <i class="fas fa-sign-out-alt logout-btn" onclick="location.href='/logout'"></i>
+        </div>
+    </header>
+    
+    <h2>Perfil de Usuario</h2>
+    <form action="{{ url_for('perfil', user_id=user_id) }}" method="POST">
+        <!-- Mostrar los datos del usuario -->
+        <label for="email">Correo Electrónico:</label>
+        <input type="text" id="email" name="email" value="{{ datos.email }}" readonly><br><br>
+
+        <label for="contraseña">Contraseña:</label>
+        <input type="text" id="contraseña" name="contraseña" value="{{ datos.contraseña }}" readonly><br><br>
+
+        <label for="nombre">Nombre Completo:</label>
+        <input type="text" id="nombre" name="nombre" value="{{ datos.nombre_completo }}" readonly><br><br>
+
+        <label for="edad">Edad:</label>
+        <input type="text" id="edad" name="edad" value="{{ datos.edad }}" readonly><br><br>
+
+        <label for="ocupacion">Ocupación:</label>
+        <input type="text" id="ocupacion" name="ocupacion" value="{{ datos.ocupacion }}" readonly><br><br>
+
+        <label for="institucion">Institución:</label>
+        <input type="text" id="institucion" name="institucion" value="{{ datos.institucion }}" readonly><br><br>
+
+        <!-- Botones de acción -->
+        <button type="button" id="editar-btn">Editar</button>
+        <button type="submit" id="guardar-btn" style="display: none;">Guardar</button>
+        <button type="button" id="cancelar-btn">Cancelar</button>
+    </form>
+
+    <script>
+        // JavaScript para manejar eventos de botones
+        const form = document.querySelector('form');
+        const editarBtn = document.getElementById('editar-btn');
+        const guardarBtn = document.getElementById('guardar-btn');
+        const cancelarBtn = document.getElementById('cancelar-btn');
+
+        // Event listener para el botón de editar
+        editarBtn.addEventListener('click', function() {
+            // Habilitar los campos para editar
+            const inputs = form.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.removeAttribute('readonly');
+            });
+            // Mostrar el botón de guardar y ocultar el de editar
+            guardarBtn.style.display = 'inline-block';
+            editarBtn.style.display = 'none';
+        });
+
+        // Event listener para el botón de cancelar
+        cancelarBtn.addEventListener('click', function() {
+            // Resetear el formulario y deshabilitar la edición
+            form.reset();
+            const inputs = form.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.setAttribute('readonly', true);
+            });
+            // Ocultar el botón de guardar y mostrar el de editar
+            guardarBtn.style.display = 'none';
+            editarBtn.style.display = 'inline-block';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingreso de Datos</title>
+</head>
+<body>
+    <h2>Ingreso de Datos</h2>
+    <form id="datos-form" action="{{ url_for('datos', user_id=user_id) }}" method="POST">
+        <!-- Campos del formulario -->
+        <label for="nombre">Nombre Completo:</label>
+        <input type="text" id="nombre" name="nombre" required>
+
+        <label for="edad">Edad:</label>
+        <input type="text" id="edad" name="edad" required>
+
+        <label for="ocupacion">Ocupación:</label>
+        <input type="text" id="ocupacion" name="ocupacion" required>
+
+        <label for="institucion">Institución:</label>
+        <input type="text" id="institucion" name="institucion" required>
+
+        <!-- Botón de envío -->
+        <button type="submit">Enviar</button>
+    </form>
+
+    <div class="btn-container">
+        <button type="button" id="cancelar-btn">Cancelar</button>
+    </div>
+
+    <script>
+        // JavaScript para manejar eventos de botones
+        const form = document.getElementById('datos-form');
+        const cancelarBtn = document.getElementById('cancelar-btn');
+
+        // Event listener para el botón de cancelar
+        cancelarBtn.addEventListener('click', function() {
+            // Resetear el formulario
+            form.reset();
+        });
+
+        // Redirigir al perfil después de enviar el formulario
+        form.addEventListener('submit', function() {
+            window.location.href = "{{ url_for('perfil', user_id=user_id) }}";
+        });
+    </script>
+</body>
+</html>

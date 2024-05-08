@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+</head>
+<body>
+    <!-- Sección de usuarios -->
+    <h2>Usuarios</h2>
+    <table>
+        <tr>
+            <th>Email</th>
+            <th>Ocupación</th>
+            <th>Institución</th>
+            <th>Edad</th>
+            <th>Nombre Completo</th>
+            <th>Acciones</th>
+        </tr>
+        {% for usuario in usuarios %}
+        <tr>
+            <td>{{ usuario.email }}</td>
+            <td>{{ usuario.ocupacion }}</td>
+            <td>{{ usuario.institucion }}</td>
+            <td>{{ usuario.edad }}</td>
+            <td>{{ usuario.nombre_completo }}</td>
+            <td>
+                <button onclick="editarUsuario('{{ usuario.id }}')">Editar</button>
+                <button onclick="eliminarUsuario('{{ usuario.id }}')">Eliminar</button>
+            </td>
+        </tr>
+        <tr id="editar_usuario_{{ usuario.id }}" style="display: none;">
+            <td><input type="text" id="email_{{ usuario.id }}" value="{{ usuario.email }}"></td>
+            <td><input type="text" id="ocupacion_{{ usuario.id }}" value="{{ usuario.ocupacion }}"></td>
+            <td><input type="text" id="institucion_{{ usuario.id }}" value="{{ usuario.institucion }}"></td>
+            <td><input type="number" id="edad_{{ usuario.id }}" value="{{ usuario.edad }}"></td>
+            <td><input type="text" id="nombre_completo_{{ usuario.id }}" value="{{ usuario.nombre_completo }}"></td>
+            <td>
+                <button onclick="guardarCambiosUsuario('{{ usuario.id }}')">Guardar cambios</button>
+                <button onclick="cancelarEdicionUsuario('{{ usuario.id }}')">Cancelar</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Sección de proyectos -->
+    <h2>Proyectos</h2>
+    <table>
+        <tr>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Autor</th>
+            <th>Fecha de Publicación</th>
+            <th>Palabras Clave</th>
+            <th>PDF</th>
+            <th>Acciones</th>
+        </tr>
+        {% for proyecto in proyectos %}
+        <tr>
+            <td>{{ proyecto.titulo }}</td>
+            <td>{{ proyecto.descripcion }}</td>
+            <td>{{ proyecto.autor }}</td>
+            <td>{{ proyecto.fecha_publicacion }}</td>
+            <td>{{ proyecto.palabras_clave }}</td>
+            <td>
+                {% if proyecto.nombre_del_archivo_pdf %}
+                <a href="{{ url_for('descargar_pdf', proyecto_id=proyecto.id) }}" target="_blank">Descargar PDF</a>
+                {% else %}
+                <form id="form_pdf_{{ proyecto.id }}" action="{{ url_for('admin_app.subir_pdf', proyecto_id=proyecto.id) }}" method="post" enctype="multipart/form-data">
+                    <input type="file" name="archivo_pdf" accept=".pdf" required>
+                    <button type="button" onclick="subirPDF('{{ proyecto.id }}')">Subir PDF</button>
+                </form>
+                {% endif %}
+                <button onclick="editarProyecto('{{ proyecto.id }}')">Editar</button>
+                <button onclick="eliminarProyecto('{{ proyecto.id }}')">Eliminar</button>
+            </td>
+        </tr>
+        <tr id="editar_proyecto_{{ proyecto.id }}" style="display: none;">
+            <td><input type="text" id="titulo_{{ proyecto.id }}" value="{{ proyecto.titulo }}"></td>
+            <td><input type="text" id="descripcion_{{ proyecto.id }}" value="{{ proyecto.descripcion }}"></td>
+            <td><input type="text" id="autor_{{ proyecto.id }}" value="{{ proyecto.autor }}"></td>
+            <td><input type="text" id="fecha_publicacion_{{ proyecto.id }}" value="{{ proyecto.fecha_publicacion }}"></td>
+            <td><input type="text" id="palabras_clave_{{ proyecto.id }}" value="{{ proyecto.palabras_clave }}"></td>
+            <td>
+                <button onclick="guardarCambiosProyecto('{{ proyecto.id }}')">Guardar cambios</button>
+                <button onclick="cancelarEdicionProyecto('{{ proyecto.id }}')">Cancelar</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Formulario para agregar usuario -->
+    <h2>Agregar Usuario</h2>
+    <form action="{{ url_for('admin_app.usuarios') }}" method="post">
+        <label>Email:</label>
+        <input type="text" name="email" required><br><br>
+        <label>Contraseña:</label>
+        <input type="password" name="contraseña" required><br><br>
+        <label>Ocupación:</label>
+        <input type="text" name="ocupacion" required><br><br>
+        <label>Institución:</label>
+        <input type="text" name="institucion" required><br><br>
+        <label>Edad:</label>
+        <input type="number" name="edad" required><br><br>
+        <label>Nombre Completo:</label>
+        <input type="text" name="nombre_completo" required><br><br>
+        <button type="submit">Agregar Usuario</button>
+    </form>
+
+    <!-- Formulario para agregar proyecto -->
+    <h2>Agregar Proyecto</h2>
+    <form id="form_agregar_proyecto" action="{{ url_for('admin_app.proyectos') }}" method="post" enctype="multipart/form-data">
+        <label>Título:</label>
+        <input type="text" name="titulo" required><br><br>
+        <label>Descripción:</label>
+        <input type="text" name="descripcion" required><br><br>
+        <label>Autor:</label>
+        <input type="text" name="autor" required><br><br>
+        <label>Fecha de Publicación:</label>
+        <input type="text" name="fecha_publicacion" placeholder="dd/mm/aaaa" required><br><br>
+        <label>Palabras Clave:</label>
+        <input type="text" name="palabras_clave" required><br><br>
+        <button type="submit">Agregar Proyecto</button>
+    </form>
+
+    <script>
+        function subirPDF(proyectoId) {
+            var formData = new FormData(document.getElementById('form_pdf_' + proyectoId));
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', document.getElementById('form_pdf_' + proyectoId).action, true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var mensaje = document.createElement('p');
+                    mensaje.textContent = JSON.parse(xhr.responseText).message;
+                    document.body.appendChild(mensaje);
+                    setTimeout(function() {
+                        mensaje.remove();
+                        document.getElementById('form_pdf_' + proyectoId).reset();
+                        window.location.reload();
+                    }, 3000);
+                } else {
+                    alert("Error al subir el archivo PDF.");
+                }
+            };
+            xhr.send(formData);
+        }
+
+        function editarUsuario(usuarioId) {
+            document.getElementById('editar_usuario_' + usuarioId).style.display = 'table-row';
+        }
+
+        function cancelarEdicionUsuario(usuarioId) {
+            document.getElementById('editar_usuario_' + usuarioId).style.display = 'none';
+        }
+
+        function guardarCambiosUsuario(usuarioId) {
+            var email = document.getElementById('email_' + usuarioId).value;
+            var ocupacion = document.getElementById('ocupacion_' + usuarioId).value;
+            var institucion = document.getElementById('institucion_' + usuarioId).value;
+            var edad = document.getElementById('edad_' + usuarioId).value;
+            var nombre_completo = document.getElementById('nombre_completo_' + usuarioId).value;
+
+            fetch("/editar_usuario/" + usuarioId, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    ocupacion: ocupacion,
+                    institucion: institucion,
+                    edad: edad,
+                    nombre_completo: nombre_completo
+                })
+            }).then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    console.error("Error al guardar cambios de usuario");
+                }
+            });
+
+            return false; // Para evitar el envío del formulario
+        }
+
+        function editarProyecto(proyectoId) {
+            document.getElementById('editar_proyecto_' + proyectoId).style.display = 'table-row';
+        }
+
+        function cancelarEdicionProyecto(proyectoId) {
+            document.getElementById('editar_proyecto_' + proyectoId).style.display = 'none';
+        }
+
+        function guardarCambiosProyecto(proyectoId) {
+            var titulo = document.getElementById('titulo_' + proyectoId).value;
+            var descripcion = document.getElementById('descripcion_' + proyectoId).value;
+            var autor = document.getElementById('autor_' + proyectoId).value;
+            var fecha_publicacion = document.getElementById('fecha_publicacion_' + proyectoId).value;
+            var palabras_clave = document.getElementById('palabras_clave_' + proyectoId).value;
+
+            fetch("/editar_proyecto/" + proyectoId, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    titulo: titulo,
+                    descripcion: descripcion,
+                    autor: autor,
+                    fecha_publicacion: fecha_publicacion,
+                    palabras_clave: palabras_clave
+                })
+            }).then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    console.error("Error al guardar cambios de proyecto");
+                }
+            });
+
+            return false; // Para evitar el envío del formulario
+        }
+
+        function eliminarUsuario(usuarioId) {
+            if (confirm("¿Estás seguro de que quieres eliminar este usuario?")) {
+                fetch("/eliminar_usuario/" + usuarioId, {
+                    method: "DELETE"
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        console.error("Error al eliminar usuario");
+                    }
+                });
+            }
+        }
+
+        function eliminarProyecto(proyectoId) {
+            if (confirm("¿Estás seguro de que quieres eliminar este proyecto?")) {
+                fetch("/eliminar_proyecto/" + proyectoId, {
+                    method: "DELETE"
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        console.error("Error al eliminar proyecto");
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador de Proyectos</title>
+    <!-- Agrega enlaces a tus estilos CSS y librería Font Awesome si no los tienes -->
+    <link rel="stylesheet" href="tu_estilo.css">
+    <link rel="stylesheet" href="ruta/a/font-awesome.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Menú -->
+        <nav>
+            <ul>
+                <li><a href="/logout">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+
+        <!-- Título y enlace al perfil -->
+        <h1>Buscador de Proyectos</h1>
+
+        <!-- Formulario de búsqueda simple -->
+        <h2>Búsqueda Simple</h2>
+        <form id="form_busqueda_simple" method="POST" action="/buscar">
+            <input type="text" id="consulta_simple" name="consulta" placeholder="Nombre del proyecto">
+            <button type="submit">Buscar</button>
+        </form>
+
+        <!-- Formulario de búsqueda avanzada -->
+        <h2>Búsqueda Avanzada</h2>
+        <form id="form_busqueda_avanzada" method="GET" action="/buscar">
+            <input type="text" id="titulo" name="titulo" placeholder="Título">
+            <input type="text" id="autor" name="autor" placeholder="Autor">
+            <input type="text" id="palabras_clave" name="palabras_clave" placeholder="Palabras Clave">
+            <button type="submit">Buscar</button>
+        </form>
+
+        <div class="container">
+            <!-- Resultados de la búsqueda -->
+            <h2>Resultados</h2>
+            <table id="tabla_resultados">
+                <tr>
+                    <th>Título</th>
+                    <th>Autor</th>
+                    <th>Palabras Clave</th>
+                    <th>Archivo PDF</th>
+                </tr>
+                {% for resultado in resultados %}
+                <tr>
+                    <td>{{ resultado.titulo }}</td>
+                    <td>{{ resultado.autor }}</td>
+                    <td>{{ resultado.palabras_clave }}</td>
+                    <td><a href="{{ url_for('descargar_pdf', proyecto_id=resultado.id) }}">Descargar PDF</a></td>
+                </tr>
+                {% endfor %}
+                {% if not resultados %}
+                <tr>
+                    <td colspan="4">No se encontraron resultados</td>
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+
+    <script>
+        function mostrarResultados(resultados) {
+            var tablaResultados = document.getElementById('tabla_resultados');
+            tablaResultados.innerHTML = "<tr><th>Título</th><th>Autor</th><th>Palabras Clave</th><th>Archivo PDF</th></tr>";
+            if (resultados.length === 0) {
+                tablaResultados.innerHTML += "<tr><td colspan='4'>No se encontraron resultados</td></tr>";
+            } else {
+                resultados.forEach(proyecto => {
+                    var fila = document.createElement('tr');
+                    fila.innerHTML = "<td>" + proyecto.titulo + "</td><td>" + proyecto.autor + "</td><td>" + proyecto.palabras_clave + "</td><td><a href='/descargar_pdf/" + proyecto.id + "'>Descargar PDF</a></td>";
+                    tablaResultados.appendChild(fila);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
