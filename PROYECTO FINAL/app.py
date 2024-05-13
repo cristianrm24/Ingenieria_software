@@ -12,7 +12,7 @@ print("Secret Key generada:", secret_key)
 
 
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__, template_folder='logeo/templates', static_folder='static')
 
 
 app = Flask(__name__, template_folder='logeo/templates')
