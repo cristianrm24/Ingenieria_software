@@ -3,22 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_cliente.css') }}">
     <title>Registro de Usuario</title>
 </head>
 <body>
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="static/img/logo.png" alt="Logo">
+            </a>
+            
+        </div>
+
+        <button class="abrir-menu" id="abrir"><i class="bi bi-list"></i></button>
+        <nav class="nav visible" id="nav">
+            <button id="cerrar" class="cerrar-menu"><i class="bi bi-x-lg"></i></button>
+            <ul class="nav-list">
+                <li><a href="#">Inicio</a></li>
+                <li><a href="/buscar">Buscador</a></li>
+                <li><a href="/login">Iniciar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
     <h1>Registro de Usuario</h1>
-    <form action="{{ url_for('registro') }}" method="POST">
-        <label for="correo">Correo Electrónico:</label>
-        <input type="email" id="email" name="email" required><br><br>
-        <label for="contraseña">Contraseña:</label>
-        <input type="password" id="contraseña" name="contraseña" required><br><br>
-        <button type="submit">Registrarse</button>
-    </form>
+    <div class="formulario">
+        <form action="{{ url_for('registro') }}" method="POST">
+            <label for="correo">Correo Electrónico:</label>
+            <input type="email" id="email" name="email" required><br><br>
+            <label for="contraseña">Contraseña:</label>
+            <input type="password" id="contraseña" name="contraseña" required><br><br>
+            <button type="submit">Registrarse</button>
+        </form>
+    </div>
+    
     {% if user_id %}
     <!-- Redireccionar automáticamente a la página de ingreso de datos si el usuario está registrado -->
     <script>
         window.location.href = "{{ url_for('datos', user_id=user_id) }}";
     </script>
     {% endif %}
+    <footer>
+        <div class="footer-contenido">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+                </a>
+            </div><!--.logo-->
+            <div class="enlaces-footer">
+                <a href="#">Terminos y condiciones</a>
+                <a href="#">Aviso de privacidad</a>
+                <a href="#">Contactanos</a>
+            </div>
+        </div><!--.footer-->
+        <p>Todos los derechos reservados. Cerebros&copy;</p>
+    </footer>
 </body>
 </html>
