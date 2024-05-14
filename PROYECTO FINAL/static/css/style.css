@@ -177,7 +177,7 @@ footer a:hover{
     color: var(--azulFuerte);
 }
 
-/**PAGINA DE LOGIN**/
+/**PAGINA DE LOGIN y formulario**/
 .titulo_login{
     margin-top: 2.5rem;
 }
@@ -204,3 +204,4 @@ footer a:hover{
     width: 80%;
     
 }
+

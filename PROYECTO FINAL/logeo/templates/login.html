@@ -67,6 +67,14 @@
         </div><!--.footer-->
         <p>Todos los derechos reservados. Cerebros&copy;</p>
     </footer>
-    <script src="static/js/script.js"></script>
+    {% if error %}
+  
+        <script>
+            alert("{{ error }}");
+        </script>
+
+    {% endif %}
+    
+
 </body>
 </html>
