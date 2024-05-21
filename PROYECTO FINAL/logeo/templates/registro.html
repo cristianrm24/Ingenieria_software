@@ -3,10 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style_cliente.css') }}">
     <title>Registro de Usuario</title>
 </head>
 <body>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:ital@1&family=Imprima&family=Montserrat:wght@700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css">
+    <title>Registro de Usuario</title>
+</head>
+<body>
+
+
     <header class="header">
         <div class="logo">
             <a href="index.html">
@@ -20,6 +31,7 @@
             <button id="cerrar" class="cerrar-menu"><i class="bi bi-x-lg"></i></button>
             <ul class="nav-list">
                 <li><a href="#">Inicio</a></li>
+
                 <li><a href="/buscar">Buscador</a></li>
                 <li><a href="/login">Iniciar Sesión</a></li>
             </ul>
@@ -29,14 +41,49 @@
     <h1>Registro de Usuario</h1>
     <div class="formulario">
         <form action="{{ url_for('registro') }}" method="POST">
+
+                <li><a href="#">Buscador</a></li>
+                <li><a href="#">Iniciar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+    <h1>Registro de Usuario</h1>
+
+    <div class="formulario contenedor">
+        <form action="{{ url_for('registro') }}" method="POST" class="contenido_formulario">
+
             <label for="correo">Correo Electrónico:</label>
             <input type="email" id="email" name="email" required><br><br>
             <label for="contraseña">Contraseña:</label>
             <input type="password" id="contraseña" name="contraseña" required><br><br>
+
             <button type="submit">Registrarse</button>
         </form>
     </div>
     
+
+            <button type="submit" class="btn btn-verde">Registrarse</button>
+        </form>
+    </div>
+
+
+    <footer>
+        <div class="footer-contenido">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+                </a>
+            </div><!--.logo-->
+            <div class="enlaces-footer">
+                <a href="#">Terminos y condiciones</a>
+                <a href="#">Aviso de privacidad</a>
+                <a href="#">Contactanos</a>
+            </div>
+        </div><!--.footer-->
+        <p>Todos los derechos reservados. Cerebros&copy;</p>
+    </footer>
+    <script src="static/js/script.js"></script>
+
     {% if user_id %}
     <!-- Redireccionar automáticamente a la página de ingreso de datos si el usuario está registrado -->
     <script>

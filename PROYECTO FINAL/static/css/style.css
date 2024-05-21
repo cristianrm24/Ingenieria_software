@@ -176,3 +176,32 @@ footer a{
 footer a:hover{
     color: var(--azulFuerte);
 }
+
+/**PAGINA DE LOGIN y formulario**/
+.titulo_login{
+    margin-top: 2.5rem;
+}
+.formulario{
+    background-color:var(--grisClaro);
+    width: 30%;
+    margin: 2rem auto;
+    padding: 2rem;
+    text-align: center;
+}
+.contenido_formulario label,input{
+    display: block;
+    margin: .5rem auto ;
+    padding: 0.5rem;
+  
+
+}
+.contenido_formulario label{
+    text-align: center;
+}
+.contenido_formulario input{
+    border-radius: .3rem;
+    padding: .5rem;
+    width: 80%;
+    
+}
+

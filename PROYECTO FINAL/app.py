@@ -14,8 +14,6 @@ print("Secret Key generada:", secret_key)
 
 app = Flask(__name__, template_folder='logeo/templates', static_folder='static')
 
-
-app = Flask(__name__, template_folder='logeo/templates')
 app.secret_key = 'tu_clave_secreta_generada'
 
 
@@ -336,12 +334,16 @@ def login():
         
         # Verificar si se encontró el usuario y si la contraseña coincide
         if usuario and usuario.get('contraseña') == contraseña:
-            # Establecer el ID del usuario en la sesión para mantenerla
+         # Establecer el ID del usuario en la sesión para mantenerla
             session['user_id'] = usuario['id']
             return redirect(url_for('buscar'))  # Redirigir al usuario a la página de búsqueda
-        
-        # Si el usuario no se encuentra o la contraseña no coincide, mostrar un mensaje de error
-        return "Correo electrónico o contraseña incorrectos. Inténtalo de nuevo."
+        else:
+        # Si el usuario no se encuentra o la contraseña no coincide, mostrar una alerta
+            mensaje = "Correo electrónico o contraseña incorrectos. Inténtalo de nuevo."
+            return render_template('login.html', error=mensaje)
+
+
+        #return "Correo electrónico o contraseña incorrectos. Inténtalo de nuevo."
 
     return render_template('login.html')
 
