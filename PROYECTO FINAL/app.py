@@ -30,6 +30,11 @@ if not os.path.exists(UPLOAD_FOLDER):
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+@app.route('/')
+def index():
+    return redirect(url_for('login'))
+
+
 def obtener_user_id_de_la_sesion():
 
     return "user_id_ficticio"

@@ -3,12 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_cliente.css') }}">
     <title>Buscador de Proyectos</title>
     <!-- Agrega enlaces a tus estilos CSS y librería Font Awesome si no los tienes -->
     <link rel="stylesheet" href="tu_estilo.css">
     <link rel="stylesheet" href="ruta/a/font-awesome.min.css">
 </head>
 <body>
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="static/img/logo.png" alt="Logo">
+            </a>
+            
+        </div>
+
+        <button class="abrir-menu" id="abrir"><i class="bi bi-list"></i></button>
+        <nav class="nav visible" id="nav">
+            <button id="cerrar" class="cerrar-menu"><i class="bi bi-x-lg"></i></button>
+            <ul class="nav-list">
+                <li><a href="#">Inicio</a></li>
+                <li><a href="/buscar">Buscador</a></li>
+                <li><a href="/login">Iniciar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
     <div class="container">
         <!-- Menú -->
         <nav>
@@ -77,5 +97,20 @@
             }
         }
     </script>
+        <footer>
+            <div class="footer-contenido">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+                    </a>
+                </div><!--.logo-->
+                <div class="enlaces-footer">
+                    <a href="#">Terminos y condiciones</a>
+                    <a href="#">Aviso de privacidad</a>
+                    <a href="#">Contactanos</a>
+                </div>
+            </div><!--.footer-->
+            <p>Todos los derechos reservados. Cerebros&copy;</p>
+        </footer>
 </body>
 </html>
