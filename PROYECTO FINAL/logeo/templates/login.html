@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:ital@1&family=Imprima&family=Montserrat:wght@700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/style_admin.css">
     <title>Iniciar Sesión</title>
 </head>
 <body>
@@ -22,8 +22,8 @@
         <nav class="nav visible" id="nav">
             <button id="cerrar" class="cerrar-menu"><i class="bi bi-x-lg"></i></button>
             <ul class="nav-list">
-                <li><a href="#">Inicio</a></li>
-                <li><a href="#">Buscador</a></li>
+                <li><a href="/login">Inicio</a></li>
+                <li><a href="/search_index">Buscador</a></li>
                 <li><a href="#">Iniciar Sesión</a></li>
             </ul>
         </nav>
@@ -44,6 +44,9 @@
 
         <form action="/registro">
             <button type="submit" class="btn">Registrarse</button>
+        </form>
+        <form action="/recuperar_contraseña">
+            <button type="submit" class="btn">Recuperar contraseña</button>
         </form>
     </div>
 
@@ -67,13 +70,13 @@
         </div><!--.footer-->
         <p>Todos los derechos reservados. Cerebros&copy;</p>
     </footer>
-    {% if error %}
+    
   
         <script>
             alert("{{ error }}");
         </script>
 
-    {% endif %}
+    
     
 
 </body>

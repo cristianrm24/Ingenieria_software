@@ -378,6 +378,20 @@ def datos(user_id):
 
     return render_template('datos.html', user_id=user_id)
 
+@app.route('/recuperar_contraseña', methods=['GET', 'POST'])
+def recuperar_contraseña():
+    if request.method == 'POST':
+        correo = request.form['correo']
+        usuario = next((u for u in obtener_usuarios() if u['email'] == correo), None)
+        
+        if usuario:
+            # Aquí puedes implementar el envío de un correo electrónico con un enlace para restablecer la contraseña.
+            # Para propósitos de demostración, simplemente mostraremos un mensaje.
+            return jsonify({"message": f"Se ha enviado un correo de recuperación a {correo}"})
+        else:
+            return jsonify({"message": "Correo electrónico no encontrado"}), 404
+    
+    return render_template('recuperar_contraseña.html')
 
 
 if __name__ == '__main__':
