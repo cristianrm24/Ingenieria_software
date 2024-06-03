@@ -27,8 +27,10 @@
         </nav>
     </header>
     <!-- Sección de usuarios -->
-    <h2>Usuarios</h2>
-    <table>
+<h2>Usuarios</h2>
+<div class="table-wrapper">
+    <table class="fl-table">
+    <thead>
         <tr>
             <th>Email</th>
             <th>Ocupación</th>
@@ -37,6 +39,8 @@
             <th>Nombre Completo</th>
             <th>Acciones</th>
         </tr>
+    </thead>
+    <tbody>
         {% for usuario in usuarios %}
         <tr>
             <td>{{ usuario.email }}</td>
@@ -45,27 +49,30 @@
             <td>{{ usuario.edad }}</td>
             <td>{{ usuario.nombre_completo }}</td>
             <td>
-                <button onclick="editarUsuario('{{ usuario.id }}')">Editar</button>
-                <button onclick="eliminarUsuario('{{ usuario.id }}')">Eliminar</button>
+                <button onclick="editarUsuario('{{ usuario.id }}')" aria-label="Editar usuario {{ usuario.nombre_completo }}">Editar</button>
+                <button onclick="eliminarUsuario('{{ usuario.id }}')" aria-label="Eliminar usuario {{ usuario.nombre_completo }}">Eliminar</button>
             </td>
         </tr>
         <tr id="editar_usuario_{{ usuario.id }}" style="display: none;">
-            <td><input type="text" id="email_{{ usuario.id }}" value="{{ usuario.email }}"></td>
-            <td><input type="text" id="ocupacion_{{ usuario.id }}" value="{{ usuario.ocupacion }}"></td>
-            <td><input type="text" id="institucion_{{ usuario.id }}" value="{{ usuario.institucion }}"></td>
-            <td><input type="number" id="edad_{{ usuario.id }}" value="{{ usuario.edad }}"></td>
-            <td><input type="text" id="nombre_completo_{{ usuario.id }}" value="{{ usuario.nombre_completo }}"></td>
+            <td><input type="email" id="email_{{ usuario.id }}" value="{{ usuario.email }}" aria-label="Editar email"></td>
+            <td><input type="text" id="ocupacion_{{ usuario.id }}" value="{{ usuario.ocupacion }}" aria-label="Editar ocupación"></td>
+            <td><input type="text" id="institucion_{{ usuario.id }}" value="{{ usuario.institucion }}" aria-label="Editar institución"></td>
+            <td><input type="number" id="edad_{{ usuario.id }}" value="{{ usuario.edad }}" aria-label="Editar edad"></td>
+            <td><input type="text" id="nombre_completo_{{ usuario.id }}" value="{{ usuario.nombre_completo }}" aria-label="Editar nombre completo"></td>
             <td>
-                <button onclick="guardarCambiosUsuario('{{ usuario.id }}')">Guardar cambios</button>
-                <button onclick="cancelarEdicionUsuario('{{ usuario.id }}')">Cancelar</button>
+                <button onclick="guardarCambiosUsuario('{{ usuario.id }}')" aria-label="Guardar cambios de usuario {{ usuario.nombre_completo }}">Guardar cambios</button>
+                <button onclick="cancelarEdicionUsuario('{{ usuario.id }}')" aria-label="Cancelar edición de usuario {{ usuario.nombre_completo }}">Cancelar</button>
             </td>
         </tr>
         {% endfor %}
-    </table>
-
+    </tbody>
+</table>
+</div>
     <!-- Sección de proyectos -->
     <h2>Proyectos</h2>
-    <table>
+    <div class="table-wrapper">
+        <table class="fl-table">
+    <thead>
         <tr>
             <th>Título</th>
             <th>Descripción</th>
@@ -75,6 +82,8 @@
             <th>PDF</th>
             <th>Acciones</th>
         </tr>
+    </thead>
+    <tbody>
         {% for proyecto in proyectos %}
         <tr>
             <td>{{ proyecto.titulo }}</td>
@@ -84,30 +93,34 @@
             <td>{{ proyecto.palabras_clave }}</td>
             <td>
                 {% if proyecto.nombre_del_archivo_pdf %}
-                <a href="{{ url_for('descargar_pdf', proyecto_id=proyecto.id) }}" target="_blank">Descargar PDF</a>
+                <a href="{{ url_for('descargar_pdf', proyecto_id=proyecto.id) }}" target="_blank" aria-label="Descargar PDF de {{ proyecto.titulo }}">Descargar PDF</a>
                 {% else %}
                 <form id="form_pdf_{{ proyecto.id }}" action="{{ url_for('admin_app.subir_pdf', proyecto_id=proyecto.id) }}" method="post" enctype="multipart/form-data">
-                    <input type="file" name="archivo_pdf" accept=".pdf" required>
+                    <input type="file" name="archivo_pdf" accept=".pdf" required aria-label="Subir PDF para {{ proyecto.titulo }}">
                     <button type="button" onclick="subirPDF('{{ proyecto.id }}')">Subir PDF</button>
                 </form>
                 {% endif %}
-                <button onclick="editarProyecto('{{ proyecto.id }}')">Editar</button>
-                <button onclick="eliminarProyecto('{{ proyecto.id }}')">Eliminar</button>
+            </td>
+            <td>
+                <button onclick="editarProyecto('{{ proyecto.id }}')" aria-label="Editar proyecto {{ proyecto.titulo }}">Editar</button>
+                <button onclick="eliminarProyecto('{{ proyecto.id }}')" aria-label="Eliminar proyecto {{ proyecto.titulo }}">Eliminar</button>
             </td>
         </tr>
         <tr id="editar_proyecto_{{ proyecto.id }}" style="display: none;">
-            <td><input type="text" id="titulo_{{ proyecto.id }}" value="{{ proyecto.titulo }}"></td>
-            <td><input type="text" id="descripcion_{{ proyecto.id }}" value="{{ proyecto.descripcion }}"></td>
-            <td><input type="text" id="autor_{{ proyecto.id }}" value="{{ proyecto.autor }}"></td>
-            <td><input type="text" id="fecha_publicacion_{{ proyecto.id }}" value="{{ proyecto.fecha_publicacion }}"></td>
-            <td><input type="text" id="palabras_clave_{{ proyecto.id }}" value="{{ proyecto.palabras_clave }}"></td>
+            <td><input type="text" id="titulo_{{ proyecto.id }}" value="{{ proyecto.titulo }}" aria-label="Editar título"></td>
+            <td><input type="text" id="descripcion_{{ proyecto.id }}" value="{{ proyecto.descripcion }}" aria-label="Editar descripción"></td>
+            <td><input type="text" id="autor_{{ proyecto.id }}" value="{{ proyecto.autor }}" aria-label="Editar autor"></td>
+            <td><input type="text" id="fecha_publicacion_{{ proyecto.id }}" value="{{ proyecto.fecha_publicacion }}" aria-label="Editar fecha de publicación"></td>
+            <td><input type="text" id="palabras_clave_{{ proyecto.id }}" value="{{ proyecto.palabras_clave }}" aria-label="Editar palabras clave"></td>
             <td>
-                <button onclick="guardarCambiosProyecto('{{ proyecto.id }}')">Guardar cambios</button>
-                <button onclick="cancelarEdicionProyecto('{{ proyecto.id }}')">Cancelar</button>
+                <button onclick="guardarCambiosProyecto('{{ proyecto.id }}')" aria-label="Guardar cambios de {{ proyecto.titulo }}">Guardar cambios</button>
+                <button onclick="cancelarEdicionProyecto('{{ proyecto.id }}')" aria-label="Cancelar edición de {{ proyecto.titulo }}">Cancelar</button>
             </td>
         </tr>
         {% endfor %}
-    </table>
+    </tbody>
+</table>
+</div>
 
     <!-- Formulario para agregar usuario -->
     <h2>Agregar Usuario</h2>
