@@ -8,14 +8,13 @@
 </head>
 <body>
     <header class="header">
+        <button id="abrir-menu"><i class="bi bi-list"></i> Menú</button>
         <div class="logo">
             <a href="index.html">
                 <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
             </a>
         </div>
-        <button class="abrir-menu" id="abrir"><i class="bi bi-list"></i></button>
-        <nav class="nav visible" id="nav">
-            <button id="cerrar" class="cerrar-menu"><i class="bi bi-x-lg"></i></button>
+        <nav class="nav" id="nav">
             <ul class="nav-list">
                 <li><a href="#">Inicio</a></li>
                 <li><a href="#">Buscador</a></li>
@@ -24,16 +23,17 @@
         </nav>
     </header>
 
-    <div class="sidebar">
-        <button onclick="mostrarSeccion('usuarios')">Usuarios</button>
-        <button onclick="mostrarSeccion('proyectos')">Proyectos</button>
-        <button onclick="mostrarSeccion('agregar-usuario')">Agregar Usuario</button>
-        <button onclick="mostrarSeccion('agregar-proyecto')">Agregar Proyecto</button>
+    <div class="sidebar" id="sidebar">
+        <button onclick="mostrarFormulario('usuarios')">Usuarios</button>
+        <button onclick="mostrarFormulario('proyectos')">Proyectos</button>
+        <button onclick="mostrarFormulario('agregar-usuario')">Agregar Usuario</button>
+        <button onclick="mostrarFormulario('agregar-proyecto')">Agregar Proyecto</button>
     </div>
-
-    <div class="content">
+    <!-- Contenido principal -->
+    <main>
+        <div class="content" id="content">
         <!-- Sección de usuarios -->
-        <div id="usuarios" class="seccion">
+        <section id="usuarios">
             <h2>Usuarios</h2>
             <div class="table-wrapper">
                 <table class="fl-table">
@@ -75,7 +75,33 @@
                     </tbody>
                 </table>
             </div>
+            <!-- Tabla de usuarios aquí -->
+        </section>
         </div>
+        <!-- Sección de proyectos -->
+        <section id="proyectos">
+            <h2>Proyectos</h2>
+            <!-- Tabla de proyectos aquí -->
+        </section>
+
+        <!-- Formulario para agregar usuario -->
+        <section id="agregar-usuario">
+            <h2>Agregar Usuario</h2>
+            <!-- Formulario para agregar usuario aquí -->
+        </section>
+
+        <!-- Formulario para agregar proyecto -->
+        <section id="agregar-proyecto">
+            <h2>Agregar Proyecto</h2>
+            <!-- Formulario para agregar proyecto aquí -->
+        </section>
+    </main>
+    
+        <!-- Sección de usuarios -->
+        
+            <h2>Usuarios</h2>
+
+       
 
         <!-- Sección de proyectos -->
         <div id="proyectos" class="seccion" style="display: none;">
@@ -164,6 +190,8 @@
                 <input type="text" name="fecha_publicacion" placeholder="dd/mm/aaaa" required><br><br>
                 <label>Palabras Clave:</label>
                 <input type="text" name="palabras_clave" required><br><br>
+                <label>PDF:</label>
+                <input type="file" name="archivo_pdf" accept="application/pdf" required><br><br>
                 <button type="submit">Agregar Proyecto</button>
             </form>
         </div>
@@ -281,6 +309,15 @@
                 });
             }
         }
+
+        // JavaScript para mostrar y ocultar la barra lateral
+        document.getElementById('abrir-menu').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('open');
+        });
+
+        document.getElementById('content').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('open');
+        });
     </script>
 
     <footer>

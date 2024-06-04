@@ -2,7 +2,14 @@
 const nav= document.querySelector('#nav');
 const abrir = document.querySelector('#abrir');
 const cerrar = document.querySelector('#cerrar');
+// JavaScript para mostrar y ocultar la barra lateral
+document.getElementById('abrir-menu').addEventListener('click', function() {
+    document.getElementById('sidebar').classList.toggle('open');
+});
 
+document.getElementById('content').addEventListener('click', function() {
+    document.getElementById('sidebar').classList.remove('open');
+});
 abrir.addEventListener("click", () => {
     nav.classList.add('visible');
 })
@@ -25,4 +32,5 @@ function subirPDF() {
 function cerrarModal() {
     document.getElementById('modal-subida').style.display = 'none';
 }
+
 
