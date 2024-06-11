@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="static/css/style_admin.css">
 </head>
 <body>
@@ -23,89 +23,70 @@
         </nav>
     </header>
 
-    <div class="sidebar" id="sidebar">
+    <aside class="sidebar" id="sidebar">
+        
         <button onclick="mostrarFormulario('usuarios')">Usuarios</button>
         <button onclick="mostrarFormulario('proyectos')">Proyectos</button>
-        <button onclick="mostrarFormulario('agregar-usuario')">Agregar Usuario</button>
-        <button onclick="mostrarFormulario('agregar-proyecto')">Agregar Proyecto</button>
-    </div>
-    <!-- Contenido principal -->
-    <main>
-        <div class="content" id="content">
-        <!-- Sección de usuarios -->
+        <button onclick="mostrarFormulario('agregarUsuario')">Agregar Usuario</button>
+        <button onclick="mostrarFormulario('agregarProyecto')">Agregar Proyecto</button>
+    </aside>
+
+    <main class="content" id="content">
         <section id="usuarios">
-            <h2>Usuarios</h2>
-            <div class="table-wrapper">
-                <table class="fl-table">
-                    <thead>
-                        <tr>
-                            <th>Email</th>
-                            <th>Ocupación</th>
-                            <th>Institución</th>
-                            <th>Edad</th>
-                            <th>Nombre Completo</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for usuario in usuarios %}
-                        <tr>
-                            <td>{{ usuario.email }}</td>
-                            <td>{{ usuario.ocupacion }}</td>
-                            <td>{{ usuario.institucion }}</td>
-                            <td>{{ usuario.edad }}</td>
-                            <td>{{ usuario.nombre_completo }}</td>
-                            <td>
-                                <button onclick="editarUsuario('{{ usuario.id }}')" aria-label="Editar usuario {{ usuario.nombre_completo }}">Editar</button>
-                                <button onclick="eliminarUsuario('{{ usuario.id }}')" aria-label="Eliminar usuario {{ usuario.nombre_completo }}">Eliminar</button>
-                            </td>
-                        </tr>
-                        <tr id="editar_usuario_{{ usuario.id }}" style="display: none;">
-                            <td><input type="email" id="email_{{ usuario.id }}" value="{{ usuario.email }}" aria-label="Editar email"></td>
-                            <td><input type="text" id="ocupacion_{{ usuario.id }}" value="{{ usuario.ocupacion }}" aria-label="Editar ocupación"></td>
-                            <td><input type="text" id="institucion_{{ usuario.id }}" value="{{ usuario.institucion }}" aria-label="Editar institución"></td>
-                            <td><input type="number" id="edad_{{ usuario.id }}" value="{{ usuario.edad }}" aria-label="Editar edad"></td>
-                            <td><input type="text" id="nombre_completo_{{ usuario.id }}" value="{{ usuario.nombre_completo }}" aria-label="Editar nombre completo"></td>
-                            <td>
-                                <button onclick="guardarCambiosUsuario('{{ usuario.id }}')" aria-label="Guardar cambios de usuario {{ usuario.nombre_completo }}">Guardar cambios</button>
-                                <button onclick="cancelarEdicionUsuario('{{ usuario.id }}')" aria-label="Cancelar edición de usuario {{ usuario.nombre_completo }}">Cancelar</button>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <!-- Tabla de usuarios aquí -->
+            <h1>USUARIOS</h1>
+            <table class="fl-table">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Ocupación</th>
+                        <th>Institución</th>
+                        <th>Edad</th>
+                        <th>Nombre Completo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario.email }}</td>
+                        <td>{{ usuario.ocupacion }}</td>
+                        <td>{{ usuario.institucion }}</td>
+                        <td>{{ usuario.edad }}</td>
+                        <td>{{ usuario.nombre_completo }}</td>
+                        <td>
+                            <button onclick="editarUsuario('{{ usuario.id }}')" aria-label="Editar usuario {{ usuario.nombre_completo }}">Editar</button>
+                            <button onclick="eliminarUsuario('{{ usuario.id }}')" aria-label="Eliminar usuario {{ usuario.nombre_completo }}">Eliminar</button>
+                        </td>
+                    </tr>
+                    <tr id="editar_usuario_{{ usuario.id }}" style="display: none;">
+                        <td><input type="email" id="email_{{ usuario.id }}" value="{{ usuario.email }}" aria-label="Editar email"></td>
+                        <td><input type="text" id="ocupacion_{{ usuario.id }}" value="{{ usuario.ocupacion }}" aria-label="Editar ocupación"></td>
+                        <td><input type="text" id="institucion_{{ usuario.id }}" value="{{ usuario.institucion }}" aria-label="Editar institución"></td>
+                        <td><input type="number" id="edad_{{ usuario.id }}" value="{{ usuario.edad }}" aria-label="Editar edad"></td>
+                        <td><input type="text" id="nombre_completo_{{ usuario.id }}" value="{{ usuario.nombre_completo }}" aria-label="Editar nombre completo"></td>
+                        <td>
+                            <button onclick="guardarCambiosUsuario('{{ usuario.id }}')" aria-label="Guardar cambios de usuario {{ usuario.nombre_completo }}">Guardar cambios</button>
+                            <button onclick="cancelarEdicionUsuario('{{ usuario.id }}')" aria-label="Cancelar edición de usuario {{ usuario.nombre_completo }}">Cancelar</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    <!-- Añade filas de ejemplo aquí -->
+                    <tr>
+                        <td>admin@gmail.com</td>
+                        <td>No lo sé</td>
+                        <td>no lo sé</td>
+                        <td>12</td>
+                        <td>Victor Hugo</td>
+                        <td>
+                            <button onclick="editarUsuario(1)">Editar</button>
+                            <button onclick="eliminarUsuario(1)">Eliminar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </section>
-        </div>
-        <!-- Sección de proyectos -->
-        <section id="proyectos">
-            <h2>Proyectos</h2>
-            <!-- Tabla de proyectos aquí -->
-        </section>
-
-        <!-- Formulario para agregar usuario -->
-        <section id="agregar-usuario">
-            <h2>Agregar Usuario</h2>
-            <!-- Formulario para agregar usuario aquí -->
-        </section>
-
-        <!-- Formulario para agregar proyecto -->
-        <section id="agregar-proyecto">
-            <h2>Agregar Proyecto</h2>
-            <!-- Formulario para agregar proyecto aquí -->
-        </section>
-    </main>
-    
-        <!-- Sección de usuarios -->
-        
-            <h2>Usuarios</h2>
-
-       
-
-        <!-- Sección de proyectos -->
-        <div id="proyectos" class="seccion" style="display: none;">
-            <h2>Proyectos</h2>
+        <section id="proyectos" style="display:none;">
+            <h1>PROYECTOS</h1>
             <div class="table-wrapper">
                 <table class="fl-table">
                     <thead>
@@ -154,11 +135,10 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-
-        <!-- Formulario para agregar usuario -->
-        <div id="agregar-usuario" class="seccion" style="display: none;">
-            <h2>Agregar Usuario</h2>
+            <!-- Añade contenido de proyectos aquí -->
+        </section>
+        <section id="agregarUsuario" style="display:none;">
+            <h1>Agregar Usuario</h1>
             <form action="{{ url_for('admin_app.usuarios') }}" method="post">
                 <label>Email:</label>
                 <input type="text" name="email" required><br><br>
@@ -174,11 +154,10 @@
                 <input type="text" name="nombre_completo" required><br><br>
                 <button type="submit">Agregar Usuario</button>
             </form>
-        </div>
-
-        <!-- Formulario para agregar proyecto -->
-        <div id="agregar-proyecto" class="seccion" style="display: none;">
-            <h2>Agregar Proyecto</h2>
+            <!-- Añade formulario para agregar usuario aquí -->
+        </section>
+        <section id="agregarProyecto" style="display:none;">
+            <h1>Agregar Proyecto</h1>
             <form id="form_agregar_proyecto" action="{{ url_for('admin_app.proyectos') }}" method="post" enctype="multipart/form-data">
                 <label>Título:</label>
                 <input type="text" name="titulo" required><br><br>
@@ -190,150 +169,12 @@
                 <input type="text" name="fecha_publicacion" placeholder="dd/mm/aaaa" required><br><br>
                 <label>Palabras Clave:</label>
                 <input type="text" name="palabras_clave" required><br><br>
-                <label>PDF:</label>
-                <input type="file" name="archivo_pdf" accept="application/pdf" required><br><br>
                 <button type="submit">Agregar Proyecto</button>
             </form>
-        </div>
-    </div>
+            <!-- Añade formulario para agregar proyecto aquí -->
+        </section>
+    </main>
 
-    <script>
-        function mostrarSeccion(seccionId) {
-            const secciones = document.querySelectorAll('.seccion');
-            secciones.forEach(seccion => {
-                seccion.style.display = 'none';
-            });
-            document.getElementById(seccionId).style.display = 'block';
-        }
-
-        function editarUsuario(usuarioId) {
-            document.getElementById('editar_usuario_' + usuarioId).style.display = 'table-row';
-        }
-
-        function cancelarEdicionUsuario(usuarioId) {
-            document.getElementById('editar_usuario_' + usuarioId).style.display = 'none';
-        }
-
-        function guardarCambiosUsuario(usuarioId) {
-            var email = document.getElementById('email_' + usuarioId).value;
-            var ocupacion = document.getElementById('ocupacion_' + usuarioId).value;
-            var institucion = document.getElementById('institucion_' + usuarioId).value;
-            var edad = document.getElementById('edad_' + usuarioId).value;
-            var nombre_completo = document.getElementById('nombre_completo_' + usuarioId).value;
-
-            fetch("/editar_usuario/" + usuarioId, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    email: email,
-                    ocupacion: ocupacion,
-                    institucion: institucion,
-                    edad: edad,
-                    nombre_completo: nombre_completo
-                })
-            }).then(response => {
-                if (response.ok) {
-                    window.location.reload();
-                } else {
-                    console.error("Error al guardar cambios de usuario");
-                }
-            });
-
-            return false; // Para evitar el envío del formulario
-        }
-
-        function editarProyecto(proyectoId) {
-            document.getElementById('editar_proyecto_' + proyectoId).style.display = 'table-row';
-        }
-
-        function cancelarEdicionProyecto(proyectoId) {
-            document.getElementById('editar_proyecto_' + proyectoId).style.display = 'none';
-        }
-
-        function guardarCambiosProyecto(proyectoId) {
-            var titulo = document.getElementById('titulo_' + proyectoId).value;
-            var descripcion = document.getElementById('descripcion_' + proyectoId).value;
-            var autor = document.getElementById('autor_' + proyectoId).value;
-            var fecha_publicacion = document.getElementById('fecha_publicacion_' + proyectoId).value;
-            var palabras_clave = document.getElementById('palabras_clave_' + proyectoId).value;
-
-            fetch("/editar_proyecto/" + proyectoId, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    titulo: titulo,
-                    descripcion: descripcion,
-                    autor: autor,
-                    fecha_publicacion: fecha_publicacion,
-                    palabras_clave: palabras_clave
-                })
-            }).then(response => {
-                if (response.ok) {
-                    window.location.reload();
-                } else {
-                    console.error("Error al guardar cambios de proyecto");
-                }
-            });
-
-            return false; // Para evitar el envío del formulario
-        }
-
-        function eliminarUsuario(usuarioId) {
-            if (confirm("¿Estás seguro de que quieres eliminar este usuario?")) {
-                fetch("/eliminar_usuario/" + usuarioId, {
-                    method: "DELETE"
-                }).then(response => {
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        console.error("Error al eliminar usuario");
-                    }
-                });
-            }
-        }
-
-        function eliminarProyecto(proyectoId) {
-            if (confirm("¿Estás seguro de que quieres eliminar este proyecto?")) {
-                fetch("/eliminar_proyecto/" + proyectoId, {
-                    method: "DELETE"
-                }).then(response => {
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        console.error("Error al eliminar proyecto");
-                    }
-                });
-            }
-        }
-
-        // JavaScript para mostrar y ocultar la barra lateral
-        document.getElementById('abrir-menu').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('open');
-        });
-
-        document.getElementById('content').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.remove('open');
-        });
-    </script>
-
-    <footer>
-        <div class="footer-contenido">
-            <div class="logo">
-                <a href="index.html">
-                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
-                </a>
-            </div><!--.logo-->
-            <div class="enlaces-footer">
-                <a href="#">Terminos y condiciones</a>
-                <a href="#">Aviso de privacidad</a>
-                <a href="#">Contactanos</a>
-            </div>
-        </div><!--.footer-->
-        <p>Todos los derechos reservados. Cerebros&copy;</p>
-    </footer>
+    <script src="static/js/script.js"></script>
 </body>
 </html>
