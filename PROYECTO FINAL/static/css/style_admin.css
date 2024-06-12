@@ -57,7 +57,7 @@ header {
     left: -250px; /* Oculta la barra lateral inicialmente */
     width: 250px;
     height: 100%;
-    background-color: #333;
+    background-color: #065964;
     padding-top: 60px; /* Añade espacio para el header */
     transition: 0.3s;
     z-index: 500; /* Asegura que el sidebar esté por debajo del header */
@@ -68,7 +68,7 @@ header {
 }
 
 .sidebar button {
-    background-color: #444;
+    background-color: #065964;
     color: white;
     padding: 10px;
     border: none;
@@ -93,7 +93,7 @@ header {
 
 .cerrar-menu {
     display: none;
-    background-color: #333;
+    background-color: #065964;
     color: white;
     padding: 10px;
     border: none;
@@ -305,7 +305,7 @@ body {
     left: -250px; /* Oculta la barra lateral inicialmente */
     width: 250px;
     height: 100%;
-    background-color: #333; /* Color de fondo oscuro */
+    background-color: #065964; /* Color de fondo oscuro */
     color: white; /* Color de texto blanco para contraste */
     padding-top: 60px; /* Añade espacio para el header */
     transition: 0.3s;
@@ -317,7 +317,7 @@ body {
 }
 
 .sidebar button {
-    background-color: #444; /* Botón con fondo ligeramente más claro */
+    background-color: #097b8a; /* Botón con fondo ligeramente más claro */
     color: white; /* Color de texto blanco */
     padding: 10px;
     border: none;
