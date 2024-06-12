@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:ital@1&family=Imprima&family=Montserrat:wght@700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css">
+    <title>Términos y Condiciones</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h2 {
+            margin-top: 20px;
+            color: #333;
+        }
+        p {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="static/img/logo.png" alt="Logo">
+            </a>
+            
+        </div>
+
+        <button class="abrir-menu" id="abrir"><i class="bi bi-list"></i></button>
+        <nav class="nav visible" id="nav">
+            <button id="cerrar" class="cerrar-menu"><i class="bi bi-x-lg"></i></button>
+            <ul class="nav-list">
+                <li><a href="/login">Inicio</a></li>
+                <li><a href="/search_index">Buscador</a></li>
+                <li><a href="#">Iniciar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="contenedor">
+        <h1>Términos y Condiciones</h1>
+        <p>Bienvenido a nuestro sitio web. Al acceder y utilizar este sitio, aceptas cumplir con los siguientes términos y condiciones, los cuales, junto con nuestra política de privacidad, rigen nuestra relación contigo en relación a este sitio web.</p>
+
+        <h2>1. Uso del Sitio</h2>
+        <p>El contenido de las páginas de este sitio web es para tu información general y uso personal. Está sujeto a cambios sin previo aviso.</p>
+
+        <h2>2. Propiedad Intelectual</h2>
+        <p>Este sitio web contiene material que es propiedad nuestra o está licenciado para nosotros. Este material incluye, pero no se limita a, el diseño, la disposición, el aspecto, la apariencia y los gráficos. La reproducción está prohibida salvo de acuerdo con el aviso de copyright, que forma parte de estos términos y condiciones.</p>
+
+        <h2>3. Uso No Autorizado</h2>
+        <p>El uso no autorizado de este sitio web puede dar lugar a una reclamación por daños y/o ser un delito penal.</p>
+
+        <h2>4. Enlaces a Otros Sitios Web</h2>
+        <p>De vez en cuando, este sitio web puede incluir enlaces a otros sitios web. Estos enlaces se proporcionan para tu conveniencia para proporcionar más información. No significa que respaldamos el sitio web(s). No tenemos ninguna responsabilidad por el contenido del sitio web vinculado.</p>
+
+        <h2>5. Limitación de Responsabilidad</h2>
+        <p>No seremos responsables de ningún daño que pueda resultar del uso o la incapacidad de usar este sitio web, ni de ningún error u omisión en el contenido del mismo.</p>
+
+        <h2>6. Cambios en los Términos y Condiciones</h2>
+        <p>Nos reservamos el derecho de realizar cambios a estos términos y condiciones en cualquier momento. Se recomienda revisar esta página periódicamente para estar al tanto de cualquier cambio.</p>
+
+        <h2>7. Ley Aplicable</h2>
+        <p>El uso de este sitio web y cualquier disputa que surja del uso de este sitio está sujeto a las leyes de México.</p>
+
+      
+    </div>
+
+
+    <footer>
+        <div class="footer-contenido">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+                </a>
+            </div><!--.logo-->
+            <div class="enlaces-footer">
+                <a href="/terminos_condiciones">Terminos y condiciones</a>
+                <a href="#">Aviso de privacidad</a>
+                <a href="#">Contactanos</a>
+            </div>
+        </div><!--.footer-->
+        <p>Todos los derechos reservados. Cerebros&copy;</p>
+    </footer>
+</body>
+</html>

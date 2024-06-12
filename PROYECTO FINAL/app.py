@@ -34,6 +34,16 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def index():
     return redirect(url_for('login'))
 
+@app.route('/terminos_condiciones')
+def terminos_condiciones():
+    return render_template('terminos_condiciones.html')
+
+@app.route('/avisos_privacidad')
+def avisos_privacidad():
+    return render_template('avisos_privacidad.html')
+
+
+
 
 def obtener_user_id_de_la_sesion():
 

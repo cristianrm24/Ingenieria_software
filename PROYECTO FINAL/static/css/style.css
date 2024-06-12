@@ -38,8 +38,8 @@ header{
 .contenedor{
     width: 80%; /* Ancho del contenedor */
     margin: 0 auto; /* Centrar el contenedor horizontalmente */
-    padding: 20px; /* Espacio alrededor del contenido */
-  
+    padding: 5rem; /* Espacio alrededor del contenido */
+    background-color:var(--grisClaro);
     box-sizing: border-box; /* El padding y el borde se incluyen en el ancho total */
     margin: 5rem auto;
 }
