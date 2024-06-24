@@ -530,3 +530,292 @@ h1, h3 {
 #agregarProyecto .btn-submit:hover {
     background-color: #45a049;
 }
+#boton_v, #delate {
+    display: inline-block; /* Cambia display a inline-block para que se alineen horizontalmente */
+    vertical-align: middle; /* Alinea verticalmente los botones al medio */
+}
+
+#boton_v {
+    --green: #4CAF50;
+    font-size: 11px;
+    padding: 0.7em 2.7em;
+    letter-spacing: 0.06em;
+    position: relative;
+    font-family: inherit;
+    border-radius: 0.6em;
+    overflow: hidden;
+    transition: all 0.3s;
+    line-height: 1.4em;
+    border: 2px solid var(--green);
+    background: linear-gradient(to right, rgba(27, 253, 156, 0.1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, 0.1) 100%);
+    color: var(--green);
+    box-shadow: inset 0 0 10px rgba(27, 253, 156, 0.4), 0 0 9px 3px rgba(27, 253, 156, 0.1);
+}
+
+#boton_v:hover {
+    color: #000000;
+    box-shadow: inset 0 0 10px rgba(27, 253, 156, 0.6), 0 0 9px 3px rgba(27, 253, 156, 0.2);
+}
+
+#boton_v:before {
+    content: "";
+    position: absolute;
+    left: -4em;
+    width: 4em;
+    height: 100%;
+    top: 0;
+    transition: transform .4s ease-in-out;
+    background: linear-gradient(to right, transparent 1%, rgba(27, 253, 156, 0.1) 40%, rgba(27, 253, 156, 0.1) 60%, transparent 100%);
+}
+
+#boton_v:hover:before {
+    transform: translateX(15em);
+}
+
+#delate {
+    display: inline-block; /* Cambia display a inline-block para que se alineen horizontalmente */
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    padding: 1em;
+    border: 0px solid transparent;
+    background-color: rgba(237, 77, 77, 0.08); /* Cambia el color de fondo a un rojo claro */
+    border-radius: 1.25em;
+    transition: all 0.2s linear;
+}
+   
+#delate:hover {
+    box-shadow: 3.4px 2.5px 4.9px rgba(237, 77, 77, 0.1),
+                8.6px 6.3px 12.4px rgba(237, 77, 77, 0.15),
+                17.5px 12.8px 25.3px rgba(237, 77, 77, 0.2),
+                36.1px 26.3px 52.2px rgba(237, 77, 77, 0.25),
+                99px 72px 143px rgba(237, 77, 77, 0.3); /* Cambia el color del box-shadow a rojo */
+}
+   
+#delate .tooltip {
+    position: relative;
+    display: inline-block;
+}
+   
+#delate .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 4em;
+    background-color: rgba(237, 77, 77, 0.9); /* Cambia el color de fondo del tooltip a rojo */
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 25%;
+    left: 110%;
+}
+   
+#delate .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent rgba(237, 77, 77, 0.9) transparent transparent; /* Cambia el color de la flecha del tooltip a rojo */
+}
+   
+#delate .tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+
+
+/* ------------------------------------------------------------------------- */
+#bot_sub {
+    width: 190px;
+    height: 56px;
+    overflow: hidden;
+    border: none;
+    color: #000000;
+    background: none;
+    position: relative;
+    padding-bottom: 2em;
+    cursor: pointer;
+  }
+  
+  #bot_sub > div,
+  #bot_sub > svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+  }
+  
+  #bot_sub:before {
+    content: "";
+    position: absolute;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    background: currentColor;
+    transition: transform 0.25s ease-out;
+  }
+  
+  #bot_sub:hover:before {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+  
+  #bot_sub .clone > *,
+  #bot_sub .text > * {
+    opacity: 1;
+    font-size: 1.3rem;
+    transition: 0.2s;
+    margin-left: 4px;
+  }
+  
+  #bot_sub .clone > * {
+    transform: translateY(60px);
+  }
+  
+  #bot_sub:hover .clone > * {
+    opacity: 1;
+    transform: translateY(0px);
+    transition: all 0.2s cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+  }
+  
+  #bot_sub:hover .text > * {
+    opacity: 1;
+    transform: translateY(-60px);
+    transition: all 0.2s cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+  }
+  
+  #bot_sub:hover .clone > :nth-child(1) {
+    transition-delay: 0.15s;
+  }
+  
+  #bot_sub:hover .clone > :nth-child(2) {
+    transition-delay: 0.2s;
+  }
+  
+  #bot_sub:hover .clone > :nth-child(3) {
+    transition-delay: 0.25s;
+  }
+  
+  #bot_sub:hover .clone > :nth-child(4) {
+    transition-delay: 0.3s;
+  }
+  /* icon style and hover */
+  #bot_sub svg {
+    width: 20px;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%) rotate(-50deg);
+    transition: 0.2s ease-out;
+  }
+  
+  #bot_sub:hover svg {
+    transform: translateY(-50%) rotate(-90deg);
+  }
+  
+
+  #actualizar {
+    position: relative;
+    overflow: hidden;
+    height: 3rem;
+    padding: 0 2rem;
+    border-radius: 1.5rem;
+    background: #3d3a4e;
+    background-size: 400%;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+#actualizar:hover::before {
+    transform: scaleX(1);
+}
+
+#actualizar .button-content {
+    position: relative;
+    z-index: 1;
+}
+
+#actualizar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    width: 100%;
+    height: inherit;
+    border-radius: inherit;
+    background: linear-gradient(
+      82.3deg,
+      #45a049 10.8%,
+      rgb(111, 218, 120) 94.3%
+    );
+    transition: all 0.475s;
+}
+
+.align-horizontal {
+    display: flex;
+    align-items: center;
+    gap: 1em; /* Espacio entre los elementos */
+  }
+  
+  #subir_p {
+    background: #00b4d8;
+    color: white;
+    font-family: inherit;
+    padding: 0.25em 1em; /* Ajustar tamaño del padding */
+    font-size: 13px; /* Ajustar tamaño de la fuente */
+    font-weight: 200;
+    border-radius: 0.9em;
+    border: none;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    box-shadow: inset 0 0 1.6em -0.6em #714da6;
+    overflow: hidden;
+    position: relative;
+    height: 1.9em; /* Ajustar altura */
+    padding-right: 3em; /* Ajustar tamaño del padding */
+    cursor: pointer;
+  }
+  
+  #subir_p .icon {
+    background: white;
+    margin-left: 1em;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2em;
+    width: 2em;
+    border-radius: 0.7em;
+    box-shadow: 0.1em 0.1em 0.6em 0.2em #7b52b9;
+    right: 0.3em;
+    transition: all 0.3s;
+  }
+  
+  #subir_p:hover .icon {
+    width: calc(100% - 0.6em);
+  }
+  
+  #subir_p .icon svg {
+    width: 1.1em;
+    transition: transform 0.3s;
+    color: #7b52b9;
+  }
+  
+  #subir_p:hover .icon svg {
+    transform: translateX(0.1em);
+  }
+  
+  #subir_p:active .icon {
+    transform: scale(0.95);
+  }
+  

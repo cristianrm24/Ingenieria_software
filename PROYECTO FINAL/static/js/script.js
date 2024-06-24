@@ -1,24 +1,3 @@
-function subirPDF(proyectoId) {
-    var formData = new FormData(document.getElementById('form_pdf_' + proyectoId));
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', document.getElementById('form_pdf_' + proyectoId).action, true);
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            var mensaje = document.createElement('p');
-            mensaje.textContent = JSON.parse(xhr.responseText).message;
-            document.body.appendChild(mensaje);
-            setTimeout(function() {
-                mensaje.remove();
-                document.getElementById('form_pdf_' + proyectoId).reset();
-                window.location.reload();
-            }, 3000);
-        } else {
-            alert("Error al subir el archivo PDF.");
-        }
-    };
-    xhr.send(formData);
-}
-
 function editarUsuario(usuarioId) {
     document.getElementById('editar_usuario_' + usuarioId).style.display = 'table-row';
 }
@@ -185,4 +164,26 @@ function mostrarFormulario(formularioId) {
         section.style.display = 'none';
     });
     document.getElementById(formularioId).style.display = 'block';
+}
+
+
+function subirPDF(proyectoId) {
+    var formData = new FormData(document.getElementById('form_pdf_' + proyectoId));
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', document.getElementById('form_pdf_' + proyectoId).action, true);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var mensaje = document.createElement('p');
+            mensaje.textContent = JSON.parse(xhr.responseText).message;
+            document.body.appendChild(mensaje);
+            setTimeout(function() {
+                mensaje.remove();
+                document.getElementById('form_pdf_' + proyectoId).reset();
+                window.location.reload();
+            }, 3000);
+        } else {
+            alert("Error al subir el archivo PDF.");
+        }
+    };
+    xhr.send(formData);
 }
