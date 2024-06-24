@@ -11,6 +11,7 @@
     --rojo: #e5383b;
     --rojoOscuro: #ba181b;
     --gris: #dddddd;
+    --azulc: #008388;
 }
 
 /* Ajustes del header y la barra lateral */
@@ -83,7 +84,7 @@ header {
 
 /* Botón para abrir la barra lateral */
 #toggle-menu {
-    background-color: #333;
+    background-color: #00949e;
     color: white;
     padding: 10px;
     border: none;
@@ -112,7 +113,7 @@ header {
     }
 
     .abrir-menu {
-        color: var(--negro);
+        color: var(--azulc);
     }
 
     .cerrar-menu {
@@ -132,7 +133,7 @@ header {
         bottom: 0; /* para que llegeue hasta abajo */
         background-color: var(--grisOcuro);
         padding: 2rem;
-        box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.5);
+        box-shadow: 0 0 0 100vmax rgba(0, 140, 165, 0.5);
     }
 
     .nav.visible {
@@ -333,7 +334,7 @@ body {
 
 /* Botón para abrir la barra lateral */
 #abrir-menu {
-    background-color: #333;
+    background-color: #147592;
     color: white; /* Asegura que el texto sea visible */
     padding: 10px;
     border: none;
@@ -363,7 +364,7 @@ body {
 
 a {
     text-decoration: none;
-    color: #fff; /* Asegura que los enlaces sean visibles */
+    color: #000000; /* Asegura que los enlaces sean visibles */
 }
 
 a:hover {
@@ -424,4 +425,108 @@ h1, h3 {
 
 .nav-list a:hover {
     color: #00b4d8;
+}
+
+/* Styles for the agregarUsuario section */
+#agregarUsuario {
+    margin: 20px auto;
+    padding: 20px;
+    width: 50%;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#agregarUsuario h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+#agregarUsuario .formulario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#agregarUsuario label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+#agregarUsuario .input-text {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#agregarUsuario .btn-submit {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#agregarUsuario .btn-submit:hover {
+    background-color: #45a049;
+}
+
+/* Styles for the agregarProyecto section */
+#agregarProyecto {
+    margin: 20px auto;
+    padding: 20px;
+    width: 50%;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#agregarProyecto h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+#agregarProyecto .formulario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#agregarProyecto label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+#agregarProyecto .input-text {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#agregarProyecto .btn-submit {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#agregarProyecto .btn-submit:hover {
+    background-color: #45a049;
 }

@@ -16,9 +16,9 @@
         </div>
         <nav class="nav" id="nav">
             <ul class="nav-list">
-                <li><a href="#">Inicio</a></li>
+    
                 <li><a href="#">Buscador</a></li>
-                <li><a href="/login">Iniciar Sesión</a></li>
+
             </ul>
         </nav>
     </header>
@@ -54,34 +54,24 @@
                         <td>{{ usuario.edad }}</td>
                         <td>{{ usuario.nombre_completo }}</td>
                         <td>
-                            <button onclick="editarUsuario('{{ usuario.id }}')" aria-label="Editar usuario {{ usuario.nombre_completo }}">Editar</button>
-                            <button onclick="eliminarUsuario('{{ usuario.id }}')" aria-label="Eliminar usuario {{ usuario.nombre_completo }}">Eliminar</button>
+                            <button onclick="editarUsuario('{{ usuario.id }}')">Editar</button>
+                            <button onclick="eliminarUsuario('{{ usuario.id }}')">Eliminar</button>
                         </td>
                     </tr>
                     <tr id="editar_usuario_{{ usuario.id }}" style="display: none;">
-                        <td><input type="email" id="email_{{ usuario.id }}" value="{{ usuario.email }}" aria-label="Editar email"></td>
-                        <td><input type="text" id="ocupacion_{{ usuario.id }}" value="{{ usuario.ocupacion }}" aria-label="Editar ocupación"></td>
-                        <td><input type="text" id="institucion_{{ usuario.id }}" value="{{ usuario.institucion }}" aria-label="Editar institución"></td>
-                        <td><input type="number" id="edad_{{ usuario.id }}" value="{{ usuario.edad }}" aria-label="Editar edad"></td>
-                        <td><input type="text" id="nombre_completo_{{ usuario.id }}" value="{{ usuario.nombre_completo }}" aria-label="Editar nombre completo"></td>
+                        <td><input type="email" id="email_{{ usuario.id }}" value="{{ usuario.email }}"></td>
+                        <td><input type="text" id="ocupacion_{{ usuario.id }}" value="{{ usuario.ocupacion }}"></td>
+                        <td><input type="text" id="institucion_{{ usuario.id }}" value="{{ usuario.institucion }}"></td>
+                        <td><input type="number" id="edad_{{ usuario.id }}" value="{{ usuario.edad }}"></td>
+                        <td><input type="text" id="nombre_completo_{{ usuario.id }}" value="{{ usuario.nombre_completo }}"></td>
                         <td>
-                            <button onclick="guardarCambiosUsuario('{{ usuario.id }}')" aria-label="Guardar cambios de usuario {{ usuario.nombre_completo }}">Guardar cambios</button>
-                            <button onclick="cancelarEdicionUsuario('{{ usuario.id }}')" aria-label="Cancelar edición de usuario {{ usuario.nombre_completo }}">Cancelar</button>
+                            <button onclick="guardarCambiosUsuario('{{ usuario.id }}')">Guardar cambios</button>
+                            <button onclick="cancelarEdicionUsuario('{{ usuario.id }}')">Cancelar</button>
                         </td>
                     </tr>
+                    
                     {% endfor %}
-                    <!-- Añade filas de ejemplo aquí -->
-                    <tr>
-                        <td>admin@gmail.com</td>
-                        <td>No lo sé</td>
-                        <td>no lo sé</td>
-                        <td>12</td>
-                        <td>Victor Hugo</td>
-                        <td>
-                            <button onclick="editarUsuario(1)">Editar</button>
-                            <button onclick="eliminarUsuario(1)">Eliminar</button>
-                        </td>
-                    </tr>
+
                 </tbody>
             </table>
         </section>
@@ -112,8 +102,11 @@
                                 {% if proyecto.nombre_del_archivo_pdf %}
                                 <a href="{{ url_for('descargar_pdf', proyecto_id=proyecto.id) }}" target="_blank" aria-label="Descargar PDF de {{ proyecto.titulo }}">Descargar PDF</a>
                                 {% else %}
-                                <button type="button" onclick="mostrarFormularioSubida('{{ proyecto.id }}')">Subir PDF</button>
-                                {% endif %}
+                                <form id="form_pdf_{{ proyecto.id }}" action="{{ url_for('admin_app.subir_pdf', proyecto_id=proyecto.id) }}" method="post" enctype="multipart/form-data">
+                                    <input type="file" name="archivo_pdf" accept=".pdf" required>
+                                    <button type="button" onclick="subirPDF('{{ proyecto.id }}')">Subir PDF</button>
+                                </form>
+                                 {% endif %}
                             </td>
                             <td>
                                 <button onclick="editarProyecto('{{ proyecto.id }}')" aria-label="Editar proyecto {{ proyecto.titulo }}">Editar</button>
@@ -141,7 +134,7 @@
             <h1>Agregar Usuario</h1>
             <form action="{{ url_for('admin_app.usuarios') }}" method="post">
                 <label>Email:</label>
-                <input type="text" name="email" required><br><br>
+                <input type="email" name="email" required><br><br>
                 <label>Contraseña:</label>
                 <input type="password" name="contraseña" required><br><br>
                 <label>Ocupación:</label>
@@ -151,7 +144,7 @@
                 <label>Edad:</label>
                 <input type="number" name="edad" required><br><br>
                 <label>Nombre Completo:</label>
-                <input type="text" name="nombre_completo" required><br><br>
+                <input type="text" name="nombre_completo" pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+" title="Solo se permiten letras y espacios" required><br><br>
                 <button type="submit">Agregar Usuario</button>
             </form>
             <!-- Añade formulario para agregar usuario aquí -->
@@ -164,9 +157,9 @@
                 <label>Descripción:</label>
                 <input type="text" name="descripcion" required><br><br>
                 <label>Autor:</label>
-                <input type="text" name="autor" required><br><br>
+                <input type="text" name="autor" pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+" title="Solo se permiten letras y espacios" required><br><br>
                 <label>Fecha de Publicación:</label>
-                <input type="text" name="fecha_publicacion" placeholder="dd/mm/aaaa" required><br><br>
+                <input type="date" name="fecha_publicacion" placeholder="dd/mm/aaaa" required><br><br>
                 <label>Palabras Clave:</label>
                 <input type="text" name="palabras_clave" required><br><br>
                 <button type="submit">Agregar Proyecto</button>

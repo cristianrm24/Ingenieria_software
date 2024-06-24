@@ -176,7 +176,6 @@ def editar_proyecto(proyecto_id):
             return jsonify({"message": "Proyecto actualizado correctamente"})
     
     return jsonify({"message": "Error al actualizar proyecto"})
-
 @admin_app.route('/eliminar_usuario/<string:usuario_id>', methods=['DELETE'])
 def eliminar_usuario(usuario_id):
     firebase.delete('/Usuarios', usuario_id)
@@ -196,6 +195,7 @@ def eliminar_proyecto(proyecto_id):
         return jsonify({"message": "Proyecto eliminado correctamente"})
     
     return jsonify({"message": "Proyecto no encontrado"})
+
 
 @admin_app.route('/subir_pdf/<string:proyecto_id>', methods=['POST'])
 def subir_pdf(proyecto_id):
